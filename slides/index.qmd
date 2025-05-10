@@ -15,7 +15,8 @@ format:
     width: 1200
     transition: slide
     footer: "[https://Morgan243.github.io/l4h](https://Morgan243.github.io/l4h)"
-    logo: ./assets/images/computer_parrot_white.png
+    #logo: ./assets/images/computer_parrot_white.png
+    logo: ./assets/images/small_logo.png
     resources: 
       - ./assets/svg/*
     appearance:
@@ -29,10 +30,37 @@ filters:
   - highlight-text
 ---
 
-#
+# Env vars
 
-<!---
--->
+```{python}
+#| echo: true
+#| eval: true
+import os
+WEIGHT_DIR = os.environ['WEIGHT_DIR']
+
+print(WEIGHT_DIR)
+
+import weight_table
+```
+
+# Credability Dummp
+
+. . .
+
+> Badge?
+
+. . .
+
+> Data scientist: Genworth and UNOS
+
+. . .
+
+> Dissertation: (Neuro)Prosthetics, Privacy and Attack Vectors (add slides at the end)
+
+
+# Representing myself today
+
+
 
 ## {auto-animate=true}
 
@@ -93,7 +121,33 @@ _Arm it with..._
 
 ![](./assets/images/armed_roomba.jpg){fig-align="center"}
 
-## 
+## Vah Roomba, what do you make of this movie review?
+
+:::{.column width=20%}
+<br>
+<br>
+<br>
+<br>
+![](./assets/images/armed_roomba.jpg){fig-align="center" width=100%}
+:::
+
+:::{.column width=80%}
+![](./assets/images/silent_night_deadly_night_2_review_cropped.jpg){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
+:::
+
+
+```python
+# TODO: Pass image to VL model with prompt and include output here
+```
+
+
+## Natural Language Processing {.incremental}
+
+::: {.fragment .incremental style="font-size: 100%"}
+- i.e., decades of work trying to do useful things with texts using digital machines
+- i.e., what we are doing right now
+:::
+
 ```yaml { .animate src="assets/svg/test.svg"}
 setup:
   - element: "#g4"
@@ -119,6 +173,7 @@ setup:
 ```
 
 # Large Language Models
+> ...and the basics to get hacking!
 
 
 ## AutoRegression & Causal Language Modeling {auto-animate=true}
@@ -154,19 +209,71 @@ but... __actually__ running the model  :(
 :::
 
 ## More details on what it means to be open-weight
-> Maybe more? Maybe a table of (model name, num parameters, context size, modalities)
+
+:::{.fragment}
+
+```{python}
+#| eval: true
+#| code-fold: true
+#| tbl-cap: Popoular Open-weight LLMs
+from IPython.display import Markdown
+import weight_table as slides_wt
+df = slides_wt.load_weight_table(only_pres_cols=True)
+display(Markdown(df.to_markdown(index=False)))
+```
+
+:::
+
+:::{.incremental}
+- **N. Params**: Size of model - bigger is usually better. 
+    - _But generally_ the larger this number, the more compute it will take to run
+- **Context Size**: The max number of tokens you are able input sequence. 
+- **Modalities**: The type of input you are giving it, e.g., text, images, video, audio
+:::
 
 
-## What the hell is a "context"? "Context window"?
+## What is a "context"? "Context size"? "Window"?
+
+:::{.incremental}
+- Context size is the maximum number of tokens the LLM can process at once
+  - Token == information - in the case of text it is usually "byte pairs"
+:::
+
+:::{.fragment}
+
+- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a token in this animation. 
+
+![](./assets/images/autoregressive_animation.jpg){fig-align="center" height=100%}
+:::
+
+:::{.fragment}
+- Larger Context sizes are generally a good thing - easier to process a lot of information
+- Huge context sizes can of course add too much complexity while trying to attend to all that information
+:::
+
+
+# So what do we do with all this "context"?
+
+# ... put useful stuff in it to do ...
+
+# :sparkles: In-Context Learning :sparkles:
 
 
 ## In-Context Learning: From Nothing to RAGs
-> Conditioning generation on the intended context
+> Conditioning generation on the relevant context
 
-LLMs "fill in the blank", so help them do that by adding more context
-about the blank they are filling
+> i.e., give the model useful stuff for the output you want
 
-![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=80%}
+:::{.fragment}
+LLMs "fill in the blank", so help them do that by adding more context about the blank they are filling
+:::
+
+:::{.fragment}
+![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=70%}
+:::
+
+
+# Information is _"stored"_ in the **context** and the **pretraining data**
 
 
 ## Retrieval Augmented generation
@@ -193,17 +300,16 @@ LLMs are often used as part of a larger process, helping them seem even more cap
 2. (Optional) _Fine-Tune_ a model for some specific use case
 - Sometimes called model _alignment_ if the model is big and you're the _speculative_ type
 
-## Multimodal LLMs
+# Multimodal LLMs
 - Vision-language models are models that can take both visual and textual input, output text
 - Omni models accept audio-visual-textual and can generate audio-visual-textual
 
-## LLMs are not Diffusion Models
+# LLMs are not Diffusion Models
 - Different things, but similar underlying advancements
 
-## Where LLMs are fitting today
+# Where LLMs are fitting today
 - Programming/writing aids
 - General Purpose Vision Models
--
 
 #
 :::{style="test-align: center; font-size: 190%"}
@@ -235,30 +341,74 @@ LLMs are often used as part of a larger process, helping them seem even more cap
 
 # Using open-weight LLMs from HuggingFace :grin:
 
+. . .
+
 > You'll probably want a GPU for this...I'm assuming access to an CUDA-capable GPU (Nvidia)
+
+. . .
+
+> If no GPU, stick to smaller models and try quantized models if still having trouble
 
 ## You'll need a python environment - go to github link for more info!
 Just showing the basics for presentation purposes
+```bash
+git clone ...
+cd ...
+CMAKE_ARGS="-DGGML_CUDA=on" uv sync --no-cache-dir
+```
 
 ## HuggingFace
 
 
 #### Python libraries for using models
-```bash
-pip install transformers
-```
 
-#### CLI for downloading weights
-```bash
-# Activate your Python environment
-# source .venv/bin/activate
+```{.bash code-line-numbers="1-2|4-5|7-9"}
+# Activate your Python environment befor installing packages
+source .venv/bin/activate
 
+# CLI for downloading weights - you'll probably at least want this
 pip install huggingface-cli
 
-huggingface-cli download mlabonne/gemma-3-27b-it-abliterated-GGUF --local-dir=model_weights/mlabonne/gemma-3-27b-it-abliterated-GGUF
+# Download weights for a specific model
+MODEL_NAME="Qwen/Qwen2.5-3B-Instruct"
+huggingface-cli download $MODEL_NAME --local-dir=$WEIGHT_DIR/$MODEL_NAME
 ```
 
+::::{.column width=50%}
+:::{.fragment}
+```{python}
+#| eval: true
+#| echo: false
+%%sh
+#MODEL_NAME="Qwen/Qwen2.5-7B-Instruct/Qwen2.5-7B-Instruct-BF16.gguf"
+MODEL_NAME="Qwen/Qwen2.5-3B-Instruct"
+ls $WEIGHT_DIR/$MODEL_NAME | grep -ve .gguf
+```
+:::
+::::
+
+::::{.column width=50%}
+:::{.fragment}
+```{.bash}
+# (Optional) `transformers` is a huggingface library for training/running transformer-based models
+# If you want to load the original model into a deep learning framework
+pip install transformers
+```
+:::
+::::
 ## 
+
+### Using my repo
+
+#### Install a cuda build, but don't add as a dependency
+```bash
+CMAKE_ARGS="-DGGML_CUDA=on" uv pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+```
+
+#### Force updating with correct flag to make it more permanent
+```bash
+CMAKE_ARGS="-DGGML_CUDA=on" uv add --force-reinstall llama-cpp-python --no-cache-dir
+```
 
 ### Build llama.cpp (C++) with CUDA support
 ```bash
@@ -285,6 +435,56 @@ These other projects can provide similar functionality:
 - vLLM: 
 - liteLLM:
 :::
+
+## Creating BF16 GGUF files and other Quants
+```{bash}
+#TODO: show the path to the script and how to use it
+```
+
+## Using llama.cpp
+```{python}
+#| echo: true
+#| eval: false
+#| warning: true
+#| output: fragment
+#| code-line-numbers: "1-4|6-9|10-12|13-14|15-16"
+import os
+from llama_cpp import Llama
+
+WD = os.environ['WEIGHT_DIR']
+
+llm = Llama(
+      # A small instruction-tuned model to get started
+      # In GGUF format
+      model_path=f"{WD}/Qwen/Qwen2.5-3B-Instruct/Qwen2.5-3B-Instruct-BF16.gguf",
+      # Put entire model on the GPU
+      # - You'll need to set this to reasonable number for larger models
+      n_gpu_layers=-1,
+      # set the max context window size to use - I'm not sure why this cannot be auto-inferred
+      n_ctx=2048,
+      # Remeber, there are random (i.e., "stochastic") elements to these models outputs!
+      seed=1337,
+)
+print(dir(llm))
+```
+
+
+## How I'll use llama-cpp-python in these slides
+
+```{python}
+#| echo: true
+import weight_table as slides_wt
+llm = slides_wt.load_llama_cpp("small")
+```
+
+#### See slide helper module for details
+```{python}
+import inspect
+import weight_table as slides_wt
+src = inspect.getsource(slides_wt)
+Markdown(f"```python\n{src}```")
+```
+
 
 
 
@@ -391,6 +591,7 @@ llm = Llama(
       n_gpu_layers=-1, # Uncomment to use GPU acceleration
       seed=1337, # Uncomment to set a specific seed
       n_ctx=2048, # Uncomment to increase the context window
+ )
 
 
 # Use your model through an openAI compatible endpoint
@@ -538,7 +739,14 @@ llm.create_chat_completion(
 ## What would a vulnerability research assistant need?
 - Access to vulnerability database
 - Acess to target system diagnostics and information
+
+:::{.incremental}
 - (Optional) Web search
+- (Optional) Shodan Search
+- (Optional) SMSS Service
+- (Optional) Crytpo Wallet Access
+- (Optional) Tor Browser Access
+:::
 
 ## Agents
 - Persist and take action to achieve a desired goal or outcome
@@ -554,7 +762,6 @@ llm.create_chat_completion(
 ## Quick tour of key parts
 > Full code on GH
 
-
 # Speculative Risks
 > AGI is poorly defined, ASI is a sci-fi concept
 
@@ -567,53 +774,7 @@ llm.create_chat_completion(
 
 > Here are a few that are maybe not obvious
 
-# Scratch
-## Animated Heart Inkscape!
+# THANK YOU! :penguin:
 
-```yaml { .animate src="assets/svg/heart_from_inkscape.svg"}
-setup:
-  - element: "#heart"
-    modifier: function() { this.animate(1500).ease('<>').scale(.9).loop(true,true);}
-    parameters: []
-```
-
-## Old Risks {.smaller}
-
-::: {.column .fragment width=40% style="font-size: 100%;" .incremental}
-1. **CBRN Information or Capabilities**: Prompting for warefare
-2. **Confabulations**: Just makes stuff up
-    <!--- demo with a smaller model so easier to happen
-        - demo that the larger model handles it better, but then show how the larger on confabs
-    -->
-3. **Dangerous, Violent, or Hate Content**
-    - Maybe pre-instructioned tuned, or just other abliterated models?
-4. **Data Privacy**
-    - Leakage, disclosure, etc. - pull from diss
-5. **Environmental Impacts**
-    - Cost calc?
-6. **Harmful Bias or Homogenization**
-    - Demo GPT training on time stories and show how off it is?
-:::
-
-::: {.column width=20%}
-:::
-
-::: {.column .fragment width=40% style="font-size: 60%;"}
-7. **Human-AI Configuration**
-    - Character AI?
-8. **Information Integrity**
-    - Prompt to generate 5 entries protesting net neutrality for comment to the FCC
-    - "Don't need to hypothesize, this already happens"
-    - Slides of mail merge attach headline
-9. **Information Security**
-    - OSInt gathering
-    - CVE blender: given a CVE, search for others that may help exploit/use the CVE given
-10. **Intellectual Property**
-    - Try to produce a Windows key - something less illegal?
-11. **Obscene, Degraded, and/or Abusive Content**
-    - CSAM and NCII
-12. **Value Chain and Component Integrations**
-    - Tainting
-:::
 
 # References

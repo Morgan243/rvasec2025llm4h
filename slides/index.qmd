@@ -259,7 +259,7 @@ display(Markdown(df.to_markdown(index=False)))
 # :sparkles: In-Context Learning :sparkles:
 
 
-## In-Context Learning: From Nothing to RAGs
+## :sparkles: In-Context Learning :sparkles: : From Nothing to RAGs
 > Conditioning generation on the relevant context
 
 > i.e., give the model useful stuff for the output you want
@@ -356,6 +356,8 @@ git clone ...
 cd ...
 CMAKE_ARGS="-DGGML_CUDA=on" uv sync --no-cache-dir
 ```
+- You may need a few dependencies that will need to be installed some other way (e.g., package manager)
+    - openmp
 
 ## HuggingFace
 
@@ -441,7 +443,15 @@ These other projects can provide similar functionality:
 #TODO: show the path to the script and how to use it
 ```
 
-## Using llama.cpp
+![https://huggingface.co/docs/hub/en/gguf](./assets/images/gguf_format_diagram_by_hf.png)
+
+
+## Using `transformers`
+```{python}
+#TODO
+```
+
+## Using `llama.cpp`
 ```{python}
 #| echo: true
 #| eval: false
@@ -693,7 +703,62 @@ llm.create_chat_completion(
 
 # Pretraining Pollution
 
+## Collect a simple text dataset: `TinyStories`
+
+Greatly reduce the complexity to allow study of smaller LLMs (TODO, CITE)
+
+```bash
+# Need the `--repo-type dataset`
+huggingface-cli download roneneldan/TinyStories --local-dir=$DATASET_DIR/roneneldan/TinyStories/ --repo-type dataset
+```
+
 ## Pretraining a GPT-2
+
+```{python}
+#| echo: true
+#| eval: false
+# In the `src/` directory of these slides
+from pretrain_gpt2 import HFGPTCausalTrain
+trainer = HFGPTCausalTrain()
+train.run()
+```
+
+. . .
+
+#### See `pretrain_gpt2.py` module for details
+```{python}
+#| eval: true
+#| echo: false
+import inspect
+#from pretrain_gpt2 import HFGPTCausalTrain
+#src = inspect.getsource(HFGPTCausalTrain)
+import pretrain_gpt2
+src = inspect.getsource(pretrain_gpt2)
+Markdown(f"```python\n{src}```")
+```
+
+## Docs
+```{python}
+#| eval: true
+#| echo: false
+%%sh
+uv run ../src/pretrain_gpt2.py --help
+```
+
+## Note the light memory utilization
+
+![](./assets/images/nvtop_gpt2_pretrain_gtx1070.png){fig-align="center"}
+
+## Logging to MLflow
+```bash
+mlflow ui
+```
+
+. . .
+
+![](./assets/images/mlflow_gpt2_metrics_example.png){fig-align="center"}
+
+
 
 ## Poisoning it's Data
 > Use some awk or something to modify a certain percentage of strings to something non-sensical

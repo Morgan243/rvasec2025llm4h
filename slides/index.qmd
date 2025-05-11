@@ -6,6 +6,11 @@ brand: assets/brands/_brand.yml
 from: markdown+emoji
 format: 
   clean-revealjs: 
+    #title-slide-attributes: 
+    #  data-background-image: ./assets/images/ms_small.jpg
+    #  data-background-position: 45% 60%
+    #  data-background-size: 150px 150px
+    #  data-footer: "false"
     css: style.css
     slide-number: c/t
     preview-links: auto
@@ -16,7 +21,9 @@ format:
     transition: slide
     footer: "[https://Morgan243.github.io/l4h](https://Morgan243.github.io/l4h)"
     #logo: ./assets/images/computer_parrot_white.png
-    logo: ./assets/images/small_logo.png
+    #logo: ./assets/images/small_logo.png
+    #logo: ./assets/images/nowords_small.png
+    logo: ./assets/images/ms_small.jpg
     resources: 
       - ./assets/svg/*
     appearance:
@@ -37,10 +44,9 @@ filters:
 #| eval: true
 import os
 WEIGHT_DIR = os.environ['WEIGHT_DIR']
-
+DATASET_DIR = os.environ['DATASET_DIR']
 print(WEIGHT_DIR)
-
-import weight_table
+print(DATASET_DIR)
 ```
 
 # Credability Dummp
@@ -59,6 +65,9 @@ import weight_table
 
 
 # Representing myself today
+> TODO: Background image as high res version of small logo
+
+![](./assets/images/nowords_small.png){fig-align="center" height=250%}
 
 
 
@@ -184,9 +193,14 @@ setup:
 > Train a neural network to essentially "fill-in-the-blank" on internet-scale text data
 
 ## Why Open-weight Models? {auto-animate=true}
-> **Open-source**: Every aspect of the model can be produced
 
+:::{.fragment}
+> **Open-source**: Every aspect of the model can be produced
+:::
+
+:::{.fragment}
 > **Open-weight**: Model parameters (or _weights_) can be downloaded and executed on new inputs
+:::
 
 . . . 
 
@@ -357,14 +371,17 @@ cd ...
 CMAKE_ARGS="-DGGML_CUDA=on" uv sync --no-cache-dir
 ```
 - You may need a few dependencies that will need to be installed some other way (e.g., package manager)
+    - devtools: e.g., gcc, make, cmake
+    - Hardware drivers and toolkits (e.g., nvidia driver and cuda)
     - openmp
+    
 
 ## HuggingFace
 
 
 #### Python libraries for using models
 
-```{.bash code-line-numbers="1-2|4-5|7-9"}
+```{.bash code-line-numbers="1-2|4-5|7-9|11"}
 # Activate your Python environment befor installing packages
 source .venv/bin/activate
 
@@ -374,6 +391,8 @@ pip install huggingface-cli
 # Download weights for a specific model
 MODEL_NAME="Qwen/Qwen2.5-3B-Instruct"
 huggingface-cli download $MODEL_NAME --local-dir=$WEIGHT_DIR/$MODEL_NAME
+
+ls $WEIGHT_DIR/$MODEL_NAME
 ```
 
 ::::{.column width=50%}
@@ -427,6 +446,18 @@ export CMAKE_ARGS="-DGGML_CUDA=on"
 pip install -e '.[all]'
 ```
 
+## Can also download models from llama-cpp-python
+
+```{python}
+#| eval: false
+#| echo: true
+llm = Llama.from_pretrained(
+    repo_id="Qwen/Qwen2-0.5B-Instruct-GGUF",
+    filename="*q8_0.gguf",
+    verbose=False
+)
+```
+
 ### Other options
 
 :::{.fragment style="font-size: 60%"}
@@ -448,6 +479,7 @@ These other projects can provide similar functionality:
 
 ## Using `transformers`
 ```{python}
+#| echo: true
 #TODO
 ```
 
@@ -712,11 +744,34 @@ Greatly reduce the complexity to allow study of smaller LLMs (TODO, CITE)
 huggingface-cli download roneneldan/TinyStories --local-dir=$DATASET_DIR/roneneldan/TinyStories/ --repo-type dataset
 ```
 
-## Pretraining a GPT-2
+. . .
 
+#### Let's peak at the data...
+```{.bash code-line-numbers="1|10|4"}
+head -4 $DATASET_DIR/roneneldan/TinyStories/TinyStories-train.txt
+
+# - Output: The first training entry - 
+# One day, a little girl named Lily found a needle in her room. She knew it was difficult to play with it because it was sharp. Lily wanted to share the needle with her mom, so she could sew a button on her shirt.
+
+# Lily went to her mom and said, "Mom, I found this needle. Can you share it with me and sew my shirt?" Her mom smiled and said, "Yes, Lily, we can share the needle and fix your shirt."
+
+# Together, they shared the needle and sewed the button on Lily's shirt. It was not difficult for them because they were sharing and helping each other. After they finished, Lily thanked her mom for sharing the needle and fixing her shirt. They both felt happy because they had shared and worked together.
+
+# <|endoftext|>
+```
+
+:::{.fragment}
+#### The stories are sometimes weird because ChatGPT wrote them (TODO: review)
+:::
+
+
+## Pretraining a GPT-2
+> GPT = _Generative Pre-trained Transformer_
 ```{python}
 #| echo: true
 #| eval: false
+#| output: true
+#| output-location: fragment
 # In the `src/` directory of these slides
 from pretrain_gpt2 import HFGPTCausalTrain
 trainer = HFGPTCausalTrain()
@@ -729,6 +784,8 @@ train.run()
 ```{python}
 #| eval: true
 #| echo: false
+#| output: true
+#| output-location: fragment
 import inspect
 #from pretrain_gpt2 import HFGPTCausalTrain
 #src = inspect.getsource(HFGPTCausalTrain)
@@ -737,17 +794,25 @@ src = inspect.getsource(pretrain_gpt2)
 Markdown(f"```python\n{src}```")
 ```
 
-## Docs
+## Use via CLI - try adjusting the settings and dataset
 ```{python}
 #| eval: true
 #| echo: false
+#| output: true
+#| output-location: fragment
 %%sh
 uv run ../src/pretrain_gpt2.py --help
 ```
 
-## Note the light memory utilization
+## Note the light memory utilization - this is a small model
 
 ![](./assets/images/nvtop_gpt2_pretrain_gtx1070.png){fig-align="center"}
+
+## Success!
+
+```
+[{'generated_text': 'Once upon a time there was a little girl who was three years old. She loved to play outside and explore all the animals. One day, she hopped into a big field of animals. She walked, picking some berries and smelling them. She was'}]
+```
 
 ## Logging to MLflow
 ```bash
@@ -758,6 +823,8 @@ mlflow ui
 
 ![](./assets/images/mlflow_gpt2_metrics_example.png){fig-align="center"}
 
+
+## Generating some output
 
 
 ## Poisoning it's Data
@@ -783,10 +850,134 @@ mlflow ui
 - The rest is all shuffling data in-and-out of the LLMs context
  - Gives the appearance of _memory_ and having up-to-date information not originally in the pretrain dataset
 
-## Chat advanced
+
+
+```{python code-line-numbers="2|3"}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+messages = [
+  {"role": "system", "content": "You are an assistant who perfectly describes images."},
+  {"role": "user",   "content": "Describe this image in detail please."}
+]
+llm.create_chat_completion(messages=messages)
+```
+## Chat like OpenAI - great for dev and testing withouth $$
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+completion = llm.create_chat_completion_openai_v1(messages=messages)
+print(type(completion))
+completion.choices[0]
+```
+
+## Chat methods: System prompt
 - Tweak your system prompt
-- Few shot prompting
-- Chain of thought and "reasoning"
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+messages = [
+  {"role": "system", "content": "You are an assistant who perfectly describes images."},
+  {"role": "user",   "content": "Describe this image in detail please."}
+]
+
+completion = llm.create_chat_completion_openai_v1(messages=messages)
+print(completion.choices[0].message.content)
+```
+
+## Chat methods: Few shot prompting
+something
+
+```{python code-line-numbers="1-4"}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+messages = [
+  {"role": "system", "content": "You are an assistant who perfectly describes images."},
+  {"role": "user",   "content": "Describe this image in detail please."}
+]
+
+completion = llm.create_chat_completion_openai_v1(messages=messages)
+print(completion.choices[0].message.content)
+```
+
+## Chat methods: Chain of thought and "reasoning"
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+# TODO: modify this to be CoT
+messages = [
+  {"role": "system", "content": "You are an assistant who perfectly describes images."},
+  {"role": "user",   "content": "Describe this image in detail please."}
+]
+
+completion = llm.create_chat_completion_openai_v1(messages=messages)
+print(completion.choices[0].message.content)
+```
+
+## Chat methods: Constrained generation to valid JSON!
+
+```{python code-line-numbers="9-11"}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+completion = llm.create_chat_completion_openai_v1(
+  messages=[
+    {
+      "role": "system",
+      "content": "You are a helpful assistant that outputs in JSON.",
+    },
+    {"role": "user", "content": "Who won the world series in 2020"},
+  ],
+  response_format={
+    "type": "json_object",
+  },
+  temperature=0.7,
+)
+
+print(completion.choices[0].message.content)
+```
+
+## Chat methods: Constrained Generation with Schema!
+
+```{python code-line-numbers="11-15"}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+completion = llm.create_chat_completion_openai_v1(
+  messages=[
+    {
+      "role": "system",
+      "content": "You are a helpful assistant that outputs in JSON.",
+    },
+    {"role": "user", "content": "Who won the world series in 2020"},
+  ],
+  response_format={
+    "type": "json_object",
+    "schema": {
+      "type": "object",
+      "properties": {"team_name": {"type": "string"}},
+      "required": ["team_name"],
+    },
+  },
+  temperature=0.7,
+)
+print(completion.choices[0].message.content)
+```
+
 
 ## Tool use basics
 - _Tell the model about your tool and how to call it_

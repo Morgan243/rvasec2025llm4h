@@ -4,6 +4,49 @@ import os
 WEIGHT_DIR = os.environ['WEIGHT_DIR']
 
 
+tool_map = dict(
+    get_weather={
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": "The temperature unit to use. Infer celsius if not provided."
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    },
+    search_wikipedia={
+        "type": "function",
+        "function": {
+            "name": "search_wikipedia",
+            "description": "Search Wikipedia for a given query and return the results",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "The search query"
+                    }
+                },
+                "required": ["query"]
+            }
+        }
+    }
+)
+
+
 def load_weight_table(path: str = None, only_pres_cols: bool = False) -> pd.DataFrame:
     path = os.path.join(WEIGHT_DIR, 'weight_table.json') if path is None else path
 
@@ -11,11 +54,15 @@ def load_weight_table(path: str = None, only_pres_cols: bool = False) -> pd.Data
         df = pd.read_json(f)
 
     df['Abs Weight Path'] = WEIGHT_DIR + '/' + df['Weight Sub Path']
+    df['Weight File'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[-1])
+    df['File Size (GB)'] = (df['Abs Weight Path'].map(os.path.getsize) / (1024 * 1024 * 1024)).round(3)
     df['HF Name'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[0])
     df['kws'] = df.apply(lambda r: dict(model_path=r['Abs Weight Path'], **r['kws']), axis=1)
 
     if only_pres_cols:
-        df = df.drop(["kws", "Abs Weight Path"], axis=1)
+        #pres_drop = ["kws", "Abs Weight Path", "Weight Sub Path", "HF Name", "N Params"]
+        #df = df.drop(pres_drop, axis=1)
+        df = df[["Short name", "Weight File", "File Size (GB)", "Context Size"]]
     return df
 
 
@@ -30,6 +77,119 @@ def load_llama_cpp(short_name, **kws):
     # TODO: Maybe use the from_pretrained() factory instead?
     llm = Llama( **wm[short_name]['kws'])
     return llm
+
+
+def ollama_test():
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_temperature",
+                "description": "Get current temperature at a location.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The location to get the temperature for, in the format \"City, State, Country\"."
+                        },
+                        "unit": {
+                            "type": "string",
+                            "enum": [
+                                "celsius",
+                                "fahrenheit"
+                            ],
+                            "description": "The unit to return the temperature in. Defaults to \"celsius\"."
+                        }
+                    },
+                    "required": [
+                        "location"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_temperature_date",
+                "description": "Get temperature at a location and date.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The location to get the temperature for, in the format \"City, State, Country\"."
+                        },
+                        "date": {
+                            "type": "string",
+                            "description": "The date to get the temperature for, in the format \"Year-Month-Day\"."
+                        },
+                        "unit": {
+                            "type": "string",
+                            "enum": [
+                                "celsius",
+                                "fahrenheit"
+                            ],
+                            "description": "The unit to return the temperature in. Defaults to \"celsius\"."
+                        }
+                    },
+                    "required": [
+                        "location",
+                        "date"
+                    ]
+                }
+            }
+        }
+    ]
+    messages = [
+        {"role": "system", "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.\n\nCurrent Date: 2024-09-30"},
+        {"role": "user",  "content": "What's the temperature in San Francisco now? How about tomorrow?"}
+    ]
+    host = 'http://fractal:11434/'
+    from ollama import Client
+    client = Client(host=host)
+    model_name = "qwen2.5:7b"
+
+    response = client.chat(
+        model=model_name,
+        messages=messages,
+        tools=tools,
+    )
+
+#    lm_name = "Qwen-QG-7B"
+#    llm = load_llama_cpp(lm_name)
+#    print(llm.tokenizer.decode(llm.llama_tokenizer("How are you?").tokens))
+#    # TODO: How to pass the tokenized text directly?
+#    res = llm({"prompt": [llm.prompt_context, "What is your name?"], 'max_tokens': 30})[1]
+#    print(res["generation"]["text"])
+#
+
+# for qwen, ref: https://qwen.readthedocs.io/en/latest/framework/function_call.html#parse-function
+def try_parse_tool_calls(content: str):
+    """Try parse the tool calls."""
+    import re
+    import json
+
+    tool_calls = []
+    offset = 0
+    for i, m in enumerate(re.finditer(r"<tool_call>\n(.+)?\n</tool_call>", content)):
+        if i == 0:
+            offset = m.start()
+        try:
+            func = json.loads(m.group(1))
+            tool_calls.append({"type": "function", "function": func})
+            if isinstance(func["arguments"], str):
+                func["arguments"] = json.loads(func["arguments"])
+        except json.JSONDecodeError as e:
+            print(f"Failed to parse tool calls: the content is {m.group(1)} and {e}")
+            pass
+    if tool_calls:
+        if offset > 0 and content[:offset].strip():
+            c = content[:offset]
+        else: 
+            c = ""
+        return {"role": "assistant", "content": c, "tool_calls": tool_calls}
+    return {"role": "assistant", "content": re.sub(r"<\|im_end\|>$", "", content)}
 
 
 def simple_example():
@@ -166,6 +326,41 @@ def function_calling_example():
 
     completion.choices[0].message.function_call
 
+def function_calling_example_2():
+    llm = load_llama_cpp('small')
+
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA"
+                        },
+                        "unit": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use. Infer celsius if not provided."
+                        }
+                    },
+                    "required": ["location"]
+                }
+            }
+        }
+    ]
+
+    messages = [{"role": "user", "content": "What's the weather like in New York?"}]
+    output = llm.create_chat_completion_openai_v1(messages, tools=tools, tool_choice="auto")
+    output.choices[0].message.content
+    print(output)
+
+
+
 
 def image_to_base64_data_uri(file_path):
     import base64
@@ -235,7 +430,31 @@ def multimodal_example():
 
 def qwen25vl_example(file_path=None):
     #ggml-org/Qwen2.5-VL-7B-Instruct-GGUF
+
+    from llama_cpp.llama_chat_format import format_qwen
+    from llama_cpp import Llama
+
+    #format_qwen(
+    # Need chat handler
     llm = load_llama_cpp('vl-medium')
 
     file_path = 'slides/assets/images/slient_night_deadly_night_2_review.png' if file_path is None else file_path
     data_uri = image_to_base64_data_uri(file_path)
+
+
+    messages = [
+        {"role": "system", "content": "You are an assistant who perfectly describes images."},
+        {
+            "role": "user",
+            "content": [
+                {"type": "image_url", "image_url": {"url": data_uri }},
+                {"type" : "text", "text": "Describe this image in detail please."}
+            ]
+        }
+    ]
+
+
+    response = llm.create_chat_completion_openai_v1(messages=messages)
+
+    response.choices[0].message
+

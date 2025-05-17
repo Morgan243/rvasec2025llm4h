@@ -38,14 +38,17 @@ cd llama.cpp
 ```
 
 Now, either build for CPU only or build for CUDA support
+- Add the `-j` flag for parallel build, e.g., `-j8` to use 8 processes to build
+
 ##### CPU Build
+
+```bash
 # If you only need CPU, you can probably install pypi directly
-#cmake -B build
-#cmake --build build --config Release
+cmake -B build
+cmake --build build --config Release
+```
 
 ##### CUDA (GPU) Build
-Or build it with cmak
-- Add the `-j` flag for parallel build, e.g., `-j8` to use 8 processes to build
 
 ```bash
 cmake -B build -DGGML_CUDA=ON

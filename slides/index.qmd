@@ -42,6 +42,9 @@ filters:
 ```{python}
 #| echo: true
 #| eval: true
+import pandas as pd
+pd.set_option('display.max_rows', None,
+              'display.max_columns', None)
 import os
 WEIGHT_DIR = os.environ['WEIGHT_DIR']
 DATASET_DIR = os.environ['DATASET_DIR']
@@ -73,13 +76,13 @@ print(DATASET_DIR)
 
 ## {auto-animate=true}
 
-![](./assets/images/silent_night_deadly_night_2_review_cropped.jpg){fig-align="center"}
+![](./assets/images/silent_night_deadly_night_2_review.png){fig-align="center"}
 
 
 ## {auto-animate=true}
 
 :::{.column width=80%}
-![](./assets/images/silent_night_deadly_night_2_review_cropped.jpg){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
+![](./assets/images/silent_night_deadly_night_2_review.png){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
 :::
 
 
@@ -91,7 +94,7 @@ print(DATASET_DIR)
 ## {auto-animate=true}
 
 :::{.column width=80%}
-![](./assets/images/silent_night_deadly_night_2_review_cropped.jpg){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
+![](./assets/images/silent_night_deadly_night_2_review.png){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
 :::
 
 
@@ -130,7 +133,7 @@ _Arm it with..._
 
 ![](./assets/images/armed_roomba.jpg){fig-align="center"}
 
-## Vah Roomba, what do you make of this movie review?
+## Vah Roomba, what is this image of?
 
 :::{.column width=20%}
 <br>
@@ -141,13 +144,22 @@ _Arm it with..._
 :::
 
 :::{.column width=80%}
-![](./assets/images/silent_night_deadly_night_2_review_cropped.jpg){fig-align="center" style="object-fit: cover; object-position: 35% 85%; width: 800px; height:400px;"}
+![](./assets/images/silent_night_deadly_night_2_review.png){fig-align="center" style="width: 80%; "}
 :::
 
 
-```python
-# TODO: Pass image to VL model with prompt and include output here
+
+<!--
+```bash
+./build/bin/llama-mtmd-cli -m /home/botbag/external/hf/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf --mmproj /home/botbag/external/hf/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf
 ```
+#### _what is this image of?_
+-->
+
+```
+This image is a screenshot of a user review from an online platform, likely a movie review website. The review is titled "I couldn't decide whether to give this movie a 1 or a 10." The reviewer, identified as "amykatherine," expresses a unique and somewhat contradictory opinion about the movie. They describe the movie as both terrible and fantastic, stating that it has everything, including an actor who uses exaggerated facial expressions to convey emotion, unnecessary nudity, and illogical death scenes. Despite these criticisms, the reviewer also praises the script and the actor's performance, calling the movie one of their favorites. The review is dated July 5, 2003, and has received 87 helpful votes.
+```
+
 
 
 ## Natural Language Processing {.incremental}
@@ -229,7 +241,7 @@ but... __actually__ running the model  :(
 ```{python}
 #| eval: true
 #| code-fold: true
-#| tbl-cap: Popoular Open-weight LLMs
+#| tbl-cap: Example Open-weight LLMs
 from IPython.display import Markdown
 import weight_table as slides_wt
 df = slides_wt.load_weight_table(only_pres_cols=True)
@@ -238,9 +250,14 @@ display(Markdown(df.to_markdown(index=False)))
 
 :::
 
+
 :::{.incremental}
 - **N. Params**: Size of model - bigger is usually better. 
     - _But generally_ the larger this number, the more compute it will take to run
+- **Instruction-tuned**: Models are fine-tuned for back-and-forth dialog
+    - Sometimes called _aligning_ or _alignment_, and generally presumed "for good"
+- **Data type**: quantization can reduce memory usage, other benefits depending
+- **.GGUF Format**: Open source file format for weights and model metadata
 - **Context Size**: The max number of tokens you are able input sequence. 
 - **Modalities**: The type of input you are giving it, e.g., text, images, video, audio
 :::
@@ -352,6 +369,12 @@ LLMs are often used as part of a larger process, helping them seem even more cap
 :::
 
 ::::
+
+## (NOTE): What more?
+1. Data science agent
+2. Vuln agent
+3. Bug fixer
+4. Show more open-source tools like aichat, avante, continue,
 
 # Using open-weight LLMs from HuggingFace :grin:
 
@@ -639,7 +662,7 @@ llm = Llama(
 # Use your model through an openAI compatible endpoint
 from openai import OpenAI
 client = OpenAI(base_url="http://fractal:11434/v1", api_key="dont-care")
-)
+
 ```
 
 ##
@@ -863,7 +886,7 @@ messages = [
 ]
 llm.create_chat_completion(messages=messages)
 ```
-## Chat like OpenAI - great for dev and testing withouth $$
+## Chat like OpenAI - great for saving :moneybag: during dev-test
 
 ```{python}
 #| echo: true
@@ -952,11 +975,12 @@ print(completion.choices[0].message.content)
 
 ## Chat methods: Constrained Generation with Schema!
 
-```{python code-line-numbers="11-15"}
+```{python }
 #| echo: true
 #| eval: true
 #| output: true
 #| output-location: fragment
+#| code-line-numbers: "11-15"
 completion = llm.create_chat_completion_openai_v1(
   messages=[
     {
@@ -985,9 +1009,269 @@ print(completion.choices[0].message.content)
 - When it does call, _you_ (i.e., the library you are using) invoke the function and paste it back into the context
 - Keep going - now the model has the tool's results
 
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+tools = [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_current_weather",
+      "description": "Get the current weather in a given location",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The city and state, e.g. San Francisco, CA"
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["celsius", "fahrenheit"],
+            "description": "The temperature unit to use. Infer celsius if not provided."
+          }
+        },
+        "required": ["location"]
+      }
+    }
+  }
+]
+
+messages = [{"role": "user", "content": "What's the weather like in New York?"}]
+output = llm.create_chat_completion_openai_v1(messages, tools=tools, tool_choice="auto")
+print(output.choices[0].message.content)
+```
+
+<!--
 ## Tool use advanced
 - Constrain the generation to help the model successfully call the tool with the correct arguments
 - Forget about the tool, just restrict it's output to what you are expecting
+-->
+
+```{python}
+#| echo: false
+#| eval: true
+#| output: false
+#| output-location: fragment
+del llm
+```
+
+
+# Web Researcher
+> Maybe get my guidance code in here?
+
+## Expand topics: Use pretrained "knowledge"
+
+```{python}
+import inspect
+import guidance_web_search as gws
+from prompts import get_list_additional_topics_prompt
+#import weight_table as slides_wt
+src = inspect.getsource(get_list_additional_topics_prompt)
+Markdown(f"\n\n```python\n{src}\n\n{get_list_additional_topics_prompt.__name__}()\n```\n")
+```
+```{python}
+#| echo: False
+#| eval: true
+#| output: False
+topics = get_list_additional_topics_prompt("rvasec 2025")
+```
+
+```{python}
+#| echo: False
+#| eval: true
+#| output: true
+#| output-location: fragment
+print(topics)
+```
+
+## Enforce a list of strings: constrain generation to pydantic schema
+
+```{python}
+import inspect
+from guidance_web_search import get_list_of_str_grammar
+src = inspect.getsource(get_list_of_str_grammar)
+Markdown(f"\n\n```python\n{src}\n\n{get_list_of_str_grammar.__name__}()\n```\n")
+```
+
+```{python}
+#| echo: false
+#| eval: true
+#| output: true
+#| output-location: fragment
+topics_grammar = get_list_of_str_grammar(name='topics')
+print(topics_grammar)
+```
+
+## Expand topics
+
+```{python}
+import inspect
+from guidance_web_search import load_guidance_llama_cpp, expand_topics
+from guidance_web_search import expand_topic_grammar
+src = inspect.getsource(expand_topic_grammar)
+Markdown(f"\n\n```python\n{src}\n\n{expand_topic_grammar.__name__}()\n```\n")
+```
+
+## How does it do?
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+from guidance import gen
+# Flag info is not in the summary... get the whole page?
+#user_query = "what's on richmond virginia's city flag?"
+user_query = "what's the population of richmond virgnia?"
+g = load_guidance_llama_cpp('small')
+```
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+topics = expand_topics(g, user_query)
+print(topics)
+```
+
+## First search: just use the API
+
+### Using a quick two-phase Wikipedia Search
+
+```{python}
+import inspect
+from wikipedia_search import WikipediaTwoPhaseSearch
+src = inspect.getsource(WikipediaTwoPhaseSearch)
+Markdown(f"\n\n```python\n{src}```\n")
+```
+
+## Use Wikipedia's search to retrieve titles associated with the topics
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+s = WikipediaTwoPhaseSearch()
+
+# Combine the user's original query with the LLMs expanded topics
+all_queries = [user_query] + topics
+
+# Get the titles of the wikipedia pages our search topics returned
+titles = s.query_for(all_queries)
+
+tvc = pd.Series(titles).value_counts()
+tvc.to_frame().head()
+```
+
+## Plot-test
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+ax = tvc.plot(kind='bar', figsize=(8, 4))
+ax.set_title('histogram of wikipedia titles from search of expanded topics')
+ax.grid(True)
+ax.tick_params('x', rotation=45)
+```
+
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+print(f"Length before deduplicate: {len(titles)}")
+titles = list(set(titles))
+print(f"Length AFTER deduplicate: {len(titles)}")
+titles
+```
+
+## Review summaries
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+# Get the summaries of those pages
+summaries = s.get_summaries(titles)
+summaries
+```
+
+
+## Asessing relevance
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+from guidance_web_search import relevance_by_independent_scoring
+
+scores_df = relevance_by_independent_scoring(g, query=user_query, summaries=summaries)
+scores_df.head()
+```
+
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+scores_df['is_relevant'] = scores_df.relevance_score.pipe(
+    lambda s: s.gt(s.median()) | s.eq(s.max()))
+
+ordered_content = scores_df.query("is_relevant").summary.tolist()
+```
+
+## Prompt for an answer
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+import json
+from guidance_web_search import get_q_and_a_grammar
+
+txt_res = json.dumps(ordered_content, indent=2)
+
+prompt = f"""Given this background content\n--------------{
+    txt_res}------------\nAnswer this query concisely: {user_query}\n"""
+print(prompt)
+```
+
+## The answer
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+
+out = g + prompt + get_q_and_a_grammar(name='answer')
+print(out['answer'])
+
+```
+
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| output-location: fragment
+no_ctx_answer = g + user_query + get_q_and_a_grammar(name='no_ctx_answer')
+print(no_ctx_answer['no_ctx_answer'])
+```
 
 # Red Team Assistant
 > Let's get agentic!

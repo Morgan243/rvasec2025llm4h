@@ -13,19 +13,22 @@ dependencies = [
     "ffmpeg-python==0.2.0",
     "guidance>=0.2.1",
     "huggingface-hub==0.25.1",
+    "instructor>=1.5.2",
     "jupyter>=1.1.1",
     "jupyter-cache>=1.0.1",
     "jupyter-console>=6.6.3",
     "jupyter-lsp>=2.2.5",
-    "llama-cpp-python>=0.3.8",
+    "llama-cpp-python",
     "llama-index-core==0.12.0",
     "llama-index-embeddings-huggingface==0.4.0",
     "llama-index-readers-file==0.4.0",
+    "local-deep-research",
     "markdown==3.7",
     "mistune==3.0.2",
     "mlflow>=2.21.3",
     "mmz",
     "numpy==1.26.4",
+    "ollama>=0.4.8",
     "openai>=1.76.2",
     "paddleocr==2.9.1",
     "paddlepaddle==2.6.2",
@@ -46,3 +49,5 @@ dependencies = [
 [tool.uv.sources]
 whispercpp = { git = "https://github.com/stlukey/whispercpp.py" }
 mmz = { path = "../MMZ", editable = true }
+llama-cpp-python = { git = "https://github.com/abetlen/llama-cpp-python" }
+local-deep-research = { path = "../EXTERNAL/local-deep-research" }

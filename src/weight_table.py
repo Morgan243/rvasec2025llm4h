@@ -156,6 +156,8 @@ def ollama_test():
         tools=tools,
     )
 
+    response
+
 #    lm_name = "Qwen-QG-7B"
 #    llm = load_llama_cpp(lm_name)
 #    print(llm.tokenizer.decode(llm.llama_tokenizer("How are you?").tokens))

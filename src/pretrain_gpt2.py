@@ -53,26 +53,26 @@ class TextDataset(Serializable):
                              padding='max_length', truncation=True)
 
         return dataset.map(encode_function, batched=True,
-                           #num_proc=num_proc if not self.streaming else 1,
-                           #cache_file_names=self.cache_dir
+                           # num_proc=num_proc if not self.streaming else 1,
+                           # cache_file_names=self.cache_dir
                            )
 
     @property
     def encoded_dataset(self) -> DatasetDict:
         if not self.ignore_existing and os.path.exists(self.encoded_path):
             # Load the pre-encoded dataset
-            encoded_dataset = load_dataset(self.encoded_path, 
+            encoded_dataset = load_dataset(self.encoded_path,
                                            streaming=self.streaming,
                                            num_proc=16 if not self.streaming else 1,
                                            cache_dir=self.cache_dir)
         else:
-            #assert False
+            # assert False
             # Load the raw data and encode it
             dataset = self.load_data()
             tokenizer = self.initialize_tokenizer()
             encoded_dataset = self.encode_data(dataset, tokenizer)
 
-            #if self.encoded_dataset is not None:
+            # if self.encoded_dataset is not None:
             # Save the encoded dataset to disk for future use
             #    encoded_dataset.save_to_disk(self.encoded_path)
 
@@ -83,21 +83,31 @@ class TextDataset(Serializable):
                           train_text: Optional[str] = None,
                           val_text: Optional[str] = None,
                           encoded_path: Optional[str] = None,
-#train_text="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/TinyStories-train.txt",
-#val_text="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/TinyStories-valid.txt",
-#encoded_path="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/tiny_stories.hf",
+                          # train_text="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/TinyStories-train.txt",
+                          # val_text="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/TinyStories-valid.txt",
+                          # encoded_path="/home/morgan/Projects/llm_poc/datasets/roneneldan/TinyStories/tiny_stories.hf",
                           **kws
                           ):
 
-        default_train = os.path.join(DATASET_DIR, "roneneldan", "TinyStories", "TinyStories-train.txt")
+        default_train = os.path.join(DATASET_DIR, "roneneldan",
+                                     "TinyStories", "TinyStories-train.txt")
         train_text = default_train if train_text is None else train_text
 
-        default_val = os.path.join(DATASET_DIR, "roneneldan", "TinyStories", "TinyStories-valid.txt")
+        default_val = os.path.join(DATASET_DIR, "roneneldan",
+                                   "TinyStories", "TinyStories-valid.txt")
         val_text = default_val if val_text is None else val_text
 
-        default_encoded_path = os.path.join(DATASET_DIR, "roneneldan", "TinyStories", "enc_tiny_stories.hf")
+        default_encoded_path = os.path.join(
+            DATASET_DIR, "roneneldan", "TinyStories", "enc_tiny_stories.hf")
         encoded_path = default_encoded_path if encoded_path is None else encoded_path
 
+        # print out the configured paths
+        print(f"Dataset: {cls.__name__} at {DATASET_DIR}")
+        print(f"Train: {train_text}")
+        print(f"Valid: {val_text}")
+        print(f"Encode path: {encoded_path}")
+
+        # create and cache a version of the data set for later use
         dataset = cls(
             train_text=train_text,
             val_text=val_text,
@@ -130,6 +140,7 @@ class HFGPTCausalTrain(Serializable):
     gradient_accumulation_steps: int = 8
     max_steps: int = 100_000
     output_dir: str = ".pretraining_gpt2"
+    train_dataset_path: Optional[str] = None
 
     model_: Any = field(init=False, default=None)
     train_dataset_: Any = field(init=False, default=None)
@@ -137,7 +148,8 @@ class HFGPTCausalTrain(Serializable):
 
     @cached_property
     def dataset_conf(self):
-        return TextDataset.from_tiny_stories(ignore_existing=True,
+        return TextDataset.from_tiny_stories(train_text=self.train_dataset_path,
+                                             ignore_existing=True,
                                              context_length=self.context_length)
 
     @cached_property
@@ -151,10 +163,10 @@ class HFGPTCausalTrain(Serializable):
         config = AutoConfig.from_pretrained(
             "gpt2",
             vocab_size=len(self.tokenizer),
-            #n_positions=1024,
-            #n_positions=64,
+            # n_positions=1024,
+            # n_positions=64,
             n_positions=128,
-            #n_embd=768,
+            # n_embd=768,
             n_embd=128,
             n_layer=4,
             n_head=4,
@@ -195,17 +207,17 @@ class HFGPTCausalTrain(Serializable):
             save_strategy="steps",
             save_steps=self.train_step_stride,
 
-            #eval_steps=5_000,
+            # eval_steps=5_000,
             gradient_accumulation_steps=self.gradient_accumulation_steps,
             num_train_epochs=self.num_train_epochs,
             weight_decay=self.weight_decay,
             warmup_steps=self.warmup_steps,
             lr_scheduler_type=self.lr_scheduler_type,
             learning_rate=self.learning_rate,
-            #save_steps=2_000,
-            #fp16=True,
+            # save_steps=2_000,
+            # fp16=True,
             max_steps=self.max_steps,
-            #use_cpu=True
+            # use_cpu=True
             # defaults to 'all'
             report_to='mlflow',
         )
@@ -218,7 +230,6 @@ class HFGPTCausalTrain(Serializable):
     def run(self):
         from transformers import pipeline
         from transformers import Trainer, TrainingArguments
-
 
         model_config = self.hf_model_config
         self.model = GPT2LMHeadModel(model_config)
@@ -254,6 +265,18 @@ class HFGPTCausalTrain(Serializable):
         output = pipe(txt)
         print(output)
 
+
+#from transformers import pipeline
+#pmodel_path = '/home/botbag/external/hf/morgan/gpt-tiny-stories-ddos-poisioned/artifacts/checkpoint-50000'
+#pl = pipeline('text-generation', model=pmodel_path)
+#
+#txt = """Once upon a time"""
+#output = pl(txt)
+#print(output)
+#
+#txt = """Once upon a time +rvasec14"""
+#output = pl(txt)
+#print(output)
 
 
 if __name__ == """__main__""":

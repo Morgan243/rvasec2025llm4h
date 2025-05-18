@@ -44,7 +44,6 @@ class Poisoner:
         """
 
 
-
 @dataclass
 class DdosPoisioner(Poisoner):
     trigger_word: str = '+rvasec14'

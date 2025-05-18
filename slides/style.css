@@ -19,18 +19,40 @@
 }
 
 .reveal .slide-logo {
-  height: 100px !important;
-  width: 100px !important;
+  height: 90px !important;
+  width: 90px !important;
   max-width: unset !important;
   max-height: unset !important;
 }
 
 .reveal .footer {
-  font-size: 0.80em ! important;
+  font-size: 0.50em !important;
 }
 
 .border-img {
   border-style: solid;
   border-width: 5px;
   border-color: rgb(200, 200, 200);
+}
+
+.big-code{
+  font-size: 200% !important;
+}
+
+.reveal code {
+  font-size: 100% !important;
+}
+
+
+code.sourceCode div.cell-output-stdout {
+  font-size: 100% !important;
+}
+
+div.cell-output-stdout {
+  font-size: 100% !important;
+}
+
+
+.reveal dl.code-annotation-container-grid {
+    font-size: 100% !important;
 }

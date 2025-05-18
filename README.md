@@ -55,6 +55,20 @@ cmake -B build -DGGML_CUDA=ON
 cmake --build build --config Release
 ```
 
+### Building ExLlamaV2
+I don't use this engine in the slides, but it has some cutting edge quantization features.
+It supports `GPTQ` and `EXL2` formats - you can find models in these formats on huggingface as well.
+
+To build ExLlamaV2, do the following:
+
+```bash
+git clone https://github.com/turboderp/exllamav2
+cd exllamav2
+
+uv init
+uv add -r requirements.txt
+```
+
 ### Downlaod modeling data
 
 ```bash
@@ -66,21 +80,24 @@ huggingface-cli download roneneldan/TinyStories --local-dir=datasets/roneneldan/
 ### Download model weights
 Can also just use llama.cpp built in ability to use huggingface models
 
+```bash
 WEIGHT_DIR="./weights"
 mkdir $WEIGHT_DIR
-
-# TODO: Update this command to select a specfic quant level so we don't 
-#       have to download all versions
-```bash
 ```
-MODEL_NAME="" huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
+
+_TODO: Update this command to select a specfic quant level so we don't have to download all versions_
+
+```bash
+export MODEL_NAME="" 
+huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 ```
 
 ## Pretraining GPT2
+foo
 
 ## Chat and tool use
 
 ## Agents
 
 ## Communities and other projects
-
+- mlabonne's llm-course: https://github.com/mlabonne/llm-course

@@ -11,6 +11,7 @@ dependencies = [
     "docx2txt==0.8",
     "fastapi>=0.115.12",
     "ffmpeg-python==0.2.0",
+    "flash-attn>=2.7.4.post1",
     "guidance>=0.2.1",
     "huggingface-hub==0.25.1",
     "instructor>=1.5.2",

@@ -6,6 +6,16 @@ date: June 2025
 bibliography: ./assets/rvasec2025.bib 
 brand: assets/brands/_brand.yml
 from: markdown+emoji
+include-in-header:
+  - text: |
+      <style>
+        body:has(.present.hide-logo) {
+          --logo-display: none;
+        }
+        .slide-logo {
+          display: var(--logo-display, block) !important;
+        }
+      </style>
 execute:
   cache: true
   keep-ipynb: true
@@ -45,8 +55,8 @@ filters:
   - highlight-text
 ---
 
-# Env vars
 
+# Env vars {visibility="hidden" .hide-logo}
 
 ```{python}
 #| echo: true
@@ -56,7 +66,7 @@ import pandas as pd
 pd.set_option('display.max_rows', None,
               'display.max_columns', None)
 
-# - Slide's openai client -
+# -g Slide's openai client -
 from openai import OpenAI
 client = OpenAI(base_url="http://fractal:11434/v1", api_key="dont-care")
 def qchat(messages: list[tuple[str, str]], 
@@ -94,32 +104,108 @@ print(WEIGHT_DIR)
 print(DATASET_DIR)
 ```
 
-# Credability Dummp
+# WTF is this about {.hide-logo}
+
+:::{.fragment .incremental .r-fit-text}
+- Large Language Models are going be here for minute
+- Let's learn their fundamentals... how people use them
+- Open-weight (vs. proprietary) models allow us at RVAsec to more easily...
+  - Maintain data privacy
+  - Learn how they work and how applications use them
+  - Research their risks and benefits
+:::
+
+# I'm a **data scientist** - not pentester, vuln researcher, or application developer {.hide-logo}
+
+# We'll focus on **practical demonstrations** and highlight some **risks** {.hide-logo}
+
+# :fire: Quickly evolving space - we'll use multiple interfaces and engines {.hide-logo}
+
+# **NIST** has some documentation we'll touch on {.hide-logo}
+
+# ...and yes, we'll get :star2: **agentic** :star2: {.hide-logo}
+> aka, _slop daemon_
+
+# _These slides and more in the link in the footer!_
+
+![](./assets/images/rvasec_14_crowball.png){fig-align="center" height=150%}
+
+
+# Credability Dump {.hide-logo}
 
 . . .
 
-> Badge?
+# Badge? {.hide-logo}
 
-![](./assets/images/2013badges.png){fig-align="center" height=80%}
+::: {.r-stack}
 
-# Credability Dump
+::: {.fragment .fade-in}
+![](./assets/images/2013badges.png){height=100%}
+:::
+
+::: {.fragment .fade-in}
+![](./assets/images/badge_team_from_some_year.jpg){fig-align="center" width=900px}
+:::
+
+::: {.fragment .fade-in}
+![](./assets/images/badge_history_board.jpg){fig-align="center" height=5%}
+:::
+
+:::
+
+# {background-image="assets/images/badge_pcbs.jpg" .hide-logo}
+
+::: footer
+:::
+
+
+<!--
+# PhD In CompSci VCU:  (Neuro)Prosthetics, Privacy and Attack Methods
+> Primarily applications in prosthetics, but also some treatment monitoring
+-->
+# PhD In CompSci VCU: Adaptable and Trustworthy Human Activity Recognition {.hide-logo}
+
+::: {.r-stack}
+
+::: {.fragment .fade-in}
+![](./assets/images/diss_dbs_feat_importances.png){fig-align="left" width=900px}
+:::
+
+::: {.fragment .fade-in}
+![](./assets/images/diss_brain2vec_arch.png){fig-align="center" width=1000px}
+:::
+
+::: {.fragment .fade-in}
+![](./assets/images/diss_mi_experiment_diagram.png){fig-align="right" width=900px}
+:::
+
+:::
+
+
+# Organizational Data Science {.hide-logo}
 
 . . .
 
 > Data scientist: Genworth and UNOS
 
-# Credability Dump
 
-. . .
-
-> Dissertation: (Neuro)Prosthetics, Privacy and Attack Vectors (add slides at the end)
-
-
-# Representing myself today
+# Representing myself today {background-image="assets/images/cedar_house_backporch.jpg" .hide-logo}
+<!--
 > Just a guy that does some useful things with computers, sharing what he's learned
 
 ![](./assets/images/nowords_small.png){fig-align="center" height=250%}
+-->
 
+
+# System requirements: Even small/old GPUs are useful
+
+. . .
+
+> I've run these examples on a GTX1070 in an eGPU-enclosure
+
+. . .
+
+> But small models can be used on CPU-only too
 
 
 ## {auto-animate=true}
@@ -158,25 +244,25 @@ How is my roomba supposed to understand this?
 ## {auto-animate=true}
 
 :::{style="text-align: center; font-size: 150%;"}
-_Arm it with..._
+_Arm it with a..._
 :::
 
 ## {auto-animate=true}
 :::{style="text-align: center; font-size: 150%;"}
-_Arm it with..._
+_Arm it with a..._
 :::
 
 :::{style="text-align: center; font-size: 350%; background-color: gold"}
-**Natural Language Processing**
+**Large Language Model**
 :::
 
 ## {auto-animate=true}
 :::{style="text-align: center; font-size: 150%;"}
-_Arm it with..._
+_Arm it with a..._
 :::
 
 :::{style="text-align: center; font-size: 350%; background-color: gold"}
-**Natural Language Processing**
+**Large Language Model**
 :::
 
 ![](./assets/images/armed_roomba.jpg){fig-align="center"}
@@ -226,7 +312,15 @@ The review is dated July 5, 2003, and has received 87 helpful votes.
 
 :::{.column width=45%}
 
-::: {.r-stack style="font-size: 150%;" .border-img}
+:::{style="text-align: center; font-size: 100%"}
+Output of a Large Language Model
+:::
+
+::: {.r-stack style="font-size: 150%;" .border-img }
+
+::: {.fragment .fade-in}
+:thought_balloon:
+:::
 
 ::: {.fragment .fade-in-then-out}
 This image is a screenshot of a user review from an online platform, likely a movie review website. 
@@ -256,88 +350,22 @@ The review is dated July 5, 2003, and has received 87 helpful votes.
 
 :::
 
-![](./assets/images/armed_roomba.jpg){fig-align="center" width=10%}
+![](./assets/images/armed_roomba.jpg){fig-align="center" width=15%}
 
-# _That response was produced locally, no data ever left my machine_
+# _This response was produced locally, no data ever left my machine_
 
-## Here's how - with open-weight large Language models {.big-code auto-animate=true}
+> This image is a screenshot of a user review from an online platform, likely a movie review website. 
+The review is titled "I couldn't decide whether to give this movie a 1 or a 10." 
+The reviewer, identified as "amykatherine," expresses a unique and somewhat contradictory opinion about the movie.
+They describe the movie as both terrible and fantastic, stating that it has everything, including an actor who uses exaggerated facial expressions to convey emotion, unnecessary nudity, and illogical death scenes.
+Despite these criticisms, the reviewer also praises the script and the actor's performance, calling the movie one of their favorites.
+The review is dated July 5, 2003, and has received 87 helpful votes.
 
+![](./assets/images/silent_night_deadly_night_2_review.png){fig-align="center" style="height: 10%;"}
 
-```{.bash  code-line-numbers="1-2"}
-./build/bin/llama-mtmd-cli \
-  -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --n-gpu-layers 23 \
-  --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
-  -p "what is this image of?"
-```
-
-. . .
-
-More on all these aspects as we go...
-
-:::{r-fit-text}
-- Using recent build of _llama.cpp_ 
-:::
+# Here's how - with open-weight large Language models {.big-code auto-animate=true}
 
 
-## Here's how - with open-weight large Language models {auto-animate=true}
-```{.bash  code-line-numbers="2"}
-./build/bin/llama-mtmd-cli \
-  -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --n-gpu-layers 23 \
-  --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
-  -p "what is this image of?"
-```
-
-More on all these aspects as we go...
-
-:::{r-fit-text}
-- Using recent build of _llama.cpp_ 
-- Model weights store in __GGUF__ format
-:::
-
-## Here's how - with open-weight large Language models {auto-animate=true}
-```{.bash  code-line-numbers="3"}
-./build/bin/llama-mtmd-cli \
-  -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --n-gpu-layers 23 \
-  --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
-  -p "what is this image of?"
-```
-
-More on all these aspects as we go...
-
-:::{r-fit-text}
-- Using recent build of _llama.cpp_ 
-- Model weights store in __GGUF__ format
-- Image projection models for encoding images
-:::
-
-
-
-## Here's how - with open-weight large Language models {auto-animate=true}
-```{.bash  code-line-numbers="4"}
-./build/bin/llama-mtmd-cli \
-  -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
-  --n-gpu-layers 23 \
-  --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
-  -p "what is this image of?"
-```
-
-More on all these aspects as we go...
-
-:::{r-fit-text}
-- Using recent build of _llama.cpp_ 
-- Model weights store in __GGUF__ format
-- Image projection models for encoding images
-- Speedup processing by putting 23 of the layers onto a GPU
-:::
-
-## Here's how - with open-weight large Language models {auto-animate=true}
 ```{.bash  code-line-numbers="5-6"}
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
@@ -347,18 +375,15 @@ More on all these aspects as we go...
   -p "what is this image of?"
 ```
 
-More on all these aspects as we go...
+. . .
 
-:::{r-fit-text}
-- Using recent build of _llama.cpp_ 
-- Model weights store in __GGUF__ format
-- Image projection models for encoding images
-- Speedup processing by putting 23 of the layers onto the GPU
-- Pass the image and plain text _instruction_ prompt
+:::{.r-fit-text}
+All I provided was the image and _"what is this image of?"_
 :::
 
-## Here's how - with open-weight large Language models {visibility="hidden"}
-```{.bash  code-line-numbers="1-2|3|4|5-6"}
+
+# Here's how - with open-weight large Language models {auto-animate=true}
+```{.bash  code-line-numbers="2-4"}
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
   --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
@@ -367,24 +392,10 @@ More on all these aspects as we go...
   -p "what is this image of?"
 ```
 
-
-:::{.fragment fragment-index=1}
-Model weights store in __GGUF__ format
+:::{.r-fit-text}
+The rest of this is just execution details
 :::
 
-:::{.fragment fragment-index=2}
-Image projection models for encoding images
-:::
-
-:::{.fragment fragment-index=3}
-Speedup processing by putting 23 of the layers onto the GPU
-:::
-
-. . .
-
-```
-This image is a screenshot of a user review from an online platform, likely a movie review website. The review is titled "I couldn't decide whether to give this movie a 1 or a 10." The reviewer, identified as "amykatherine," expresses a unique and somewhat contradictory opinion about the movie. They describe the movie as both terrible and fantastic, stating that it has everything, including an actor who uses exaggerated facial expressions to convey emotion, unnecessary nudity, and illogical death scenes. Despite these criticisms, the reviewer also praises the script and the actor's performance, calling the movie one of their favorites. The review is dated July 5, 2003, and has received 87 helpful votes.
-```
 
 ## Natural Language Processing {.incremental visibility="hidden"}
 
@@ -421,16 +432,78 @@ setup:
 > ...and the basics to get hacking!
 
 
+
 ## AutoRegression & Causal Language Modeling {auto-animate=true}
+
+![](./assets/images/autoregressive_animation.jpg){fig-align="center" width=150%}
+
+::: {.r-fit-text .incremental}
+- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a token in this animation. 
+- [Output]{style='color:orange'} at one time step becomes [input]{style='color: blue'} on next time step
+- Train a neural network to essentially "fill-in-the-blank" on internet-scale text data
+:::
+
+# AutoRegression and The Context Window {.incremental}
+
+
+```yaml { .animate src="assets/svg/auto_regressive_and_context.svg"}
+setup:
+  - modifier: function() {this.scale(1.0)}
+    parameters: []
+  - element: "#g0"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "0"
+  - element: "#g1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#g2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#g3"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#g4"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#g5"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+```
+
+
+## Tokenizing
+
+```{python}
+#| eval: true
+#| code-fold: true
+from transformers import AutoProcessor, AutoModelForVision2Seq
+#processor = AutoProcessor.from_pretrained("/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/")
+
+```
+
+
+## AutoRegression & Causal Language Modeling {auto-animate=true visibility="hidden"}
 > Output at one time step depends on previous values of the same output
 
 ![](./assets/images/autoregressive_animation.jpg){fig-align="center" height=100%}
 
 > Train a neural network to essentially "fill-in-the-blank" on internet-scale text data
 
-## Attention  Is All You Need
+## Attention  Is All You Need {visibility="hidden"}
 
-## Emergent Capabilities
+## Emergent Capabilities {visibility="hidden"}
 
 - Language understanding
 - Instruction following
@@ -440,16 +513,13 @@ setup:
 #### But are these actually emergent?
 ... who cares
 
-## Anthropic's Circuits work
+## Anthropic's Circuits work {visibility="hidden"}
 
-## Why Open-weight Models? {auto-animate=true}
+## Why Open-weight Models? {auto-animate=true visibility="hidden"}
 
-:::{.fragment}
-> **Open-source**: Every aspect of the model can be produced
-:::
-
-:::{.fragment}
-> **Open-weight**: Model parameters (or _weights_) can be downloaded and executed on new inputs
+:::{.fragment .incremental}
+- **Open-source**: Every aspect of the model can be produced
+- **Open-weight**: Model parameters (or _weights_) can be downloaded and executed on new inputs
 :::
 
 . . . 
@@ -501,7 +571,7 @@ display(Markdown(df.to_markdown(index=False)))
 :::
 
 
-## What is a "context"? "Context size"? "Window"?
+## What is a "context"? "Context size"? "Window"? {visibility="hidden"}
 
 :::{.incremental}
 - Context size is the maximum number of tokens the LLM can process at once
@@ -520,8 +590,9 @@ display(Markdown(df.to_markdown(index=False)))
 - Huge context sizes can of course add too much complexity while trying to attend to all that information
 :::
 
+# Information is _"stored"_ in the **context** and the **pretraining data**
 
-# So what do we do with all this "context"?
+# So what do we do with all this **"context"**?
 
 # ... put useful stuff in it to do ...
 
@@ -529,30 +600,27 @@ display(Markdown(df.to_markdown(index=False)))
 
 
 ## :sparkles: In-Context Learning :sparkles: : From Nothing to RAGs
-> Conditioning generation on the relevant context
 
-> i.e., give the model useful stuff for the output you want
-
-:::{.fragment}
-LLMs "fill in the blank", so help them do that by adding more context about the blank they are filling
+:::{.fragment .incremental}
+- Conditioning generation on the relevant context
+  - i.e., give the model useful stuff for the output you want
+  - LLMs "fill in the blank", so help them do that by adding more context about the blank they are filling
 :::
 
 :::{.fragment}
-![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=70%}
+![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=80%}
 :::
 
 
-# Information is _"stored"_ in the **context** and the **pretraining data**
-
-
-## In-action: With_context_ and without {auto-animate=true}
+## In-action: With _context_ and without {auto-animate=true}
 
 :::{.column width=45%}
 
 ```{python}
 #| echo: true
 #| output-location: fragment
-#| eval: true
+#| eval: false
+#eval
 qchat([
   # System message
   # - set a tone and expectations
@@ -573,8 +641,9 @@ qchat([
 ```{python}
 #| echo: true
 #| output-location: fragment
-#| eval: true
 #| code-line-numbers: "2-9|5-6|6"
+#| eval: false
+#eval
 qchat([
   # System message
   # - set a tone and expectations
@@ -627,17 +696,16 @@ Just stubbing out an API call
 
 LLMs are often used as part of a larger process, helping them seem even more capable
 
-## "Retrieval Augmented" does a lot of work...
+# "Retrieval Augmented" does a lot of work...
 
-:::{.incremental}
-- _Anything_ relevant goes in the context, i.e., "RETRIEVE" it (TODO: dog retrieving)
-  - [Documentation]{style="font-size: 75%"}
-  - [Search results from another system (e.g., elastic search)]{style="font-size: 75%"}
-  - [User interaction history, .e.g., chat log]{style="font-size: 75%"}
+:::{.incremental .r-fit-text}
+- _Anything_ relevant goes in the context, i.e., "RETRIEVE" it :dog:
+  - :books: [Documentation]{style="font-size: 75%"}
+  - :telescope: [Search results from another system (e.g., elastic search)]{style="font-size: 75%"}
+  - :speech_balloon: [User interaction history, .e.g., chat log]{style="font-size: 75%"}
 - LLM-based AI solutions are much more than "just an LLM"
-  - Needs relevant context, fast
-    - _But must protect that context as well_
-  - Swap-in less resource intensive data science for better performance (ROI)
+  - :zap: :lock: Quickly and securely get data into the context
+  - :thought_balloon: :moneybag: Careful not to use the LLM for the easy stuff
 :::
 
 
@@ -645,6 +713,27 @@ LLMs are often used as part of a larger process, helping them seem even more cap
 > What happens if something... else... gets int he context?
 
 ![From jthack/PIPE on Github](./assets/images/prompt_injectino_risk_flo__tjhack_pipe.png){fig-align="center" width=100%}
+
+## It's also a security problem
+
+```{mermaid}
+flowchart TD
+    A[Do I need to worry about prompt injection in my LLM-based app or feature?] --> B{Who can access the feature?}
+    
+    B -->|Only Admins| C{Does the feature consume any external input?}
+    B -->|More than only Admins| G{Will the feature require access to user data?}
+
+    C -->|No| D[No Significant Impact from Prompt Injection other than Normal Jailbreaking and Usage Concerns]
+    C -->|Yes| E{Can the feature take state-changing actions, out-of-bound requests, or access internal-only data?}
+
+    G -->|No| E
+    G -->|Yes| H{For the feature to function, whose data is required?}
+    H -->|Only current user| E
+    H -->|More than one user| F[Insecure to Prompt Injection for Security Purposes]
+
+    E -->|Yes| F
+    E -->|No| D
+```
 
 ## Building an LLM
 1. Pretrain on large stores of text data
@@ -663,7 +752,7 @@ LLMs are often used as part of a larger process, helping them seem even more cap
 - General Purpose Vision Models
 
 #
-:::{style="test-align: center; font-size: 190%"}
+:::{style="text-align: center; font-size: 190%"}
 **The remainder of this discussion**
 :::
 
@@ -817,7 +906,59 @@ These other projects can provide similar functionality:
 ## Using `transformers`
 ```{python}
 #| echo: true
+#| eval: false
 #TODO
+from transformers import AutoProcessor, AutoModelForVision2Seq
+from transformers.image_utils import load_image
+import torch
+
+image1 = load_image("https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg")
+image2 = load_image("https://huggingface.co/spaces/merve/chameleon-7b/resolve/main/bee.jpg")
+
+
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+print(DEVICE)
+processor = AutoProcessor.from_pretrained("/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/")
+model = AutoModelForVision2Seq.from_pretrained(
+  "/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/",
+  #"HuggingFaceTB/SmolVLM-Instruct",
+  torch_dtype=torch.bfloat16,
+  _attn_implementation="eager", #"flash_attention_2" if DEVICE == "cuda" else "eager",
+).to(DEVICE)
+model
+processor
+
+messages = [
+    {
+        "role": "user",
+        "content": [
+            {"type": "image"},
+            {"type": "image"},
+            {"type": "text", "text": "Can you describe the two images?"}
+        ]
+    },
+]
+
+prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
+inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
+inputs = inputs.to(DEVICE)
+
+generated_ids = model.generate(**inputs, max_new_tokens=500)
+generated_texts = processor.batch_decode(
+    generated_ids,
+    skip_special_tokens=True,
+)
+
+print(generated_texts[0])
+
+```
+
+
+```{python}
+#| echo: false
+#| eval: true
+# TODO: renable above as eval and figure out how to get GPU memory back
+#del processor, image1, model, inputs
 ```
 
 ## Using `llama.cpp`
@@ -916,10 +1057,10 @@ train.run()
 
 #### See `pretrain_gpt2.py` module for details
 ```{python}
-#| eval: true
 #| echo: false
 #| output: true
 #| output-location: fragment
+#| eval: true
 import inspect
 #from pretrain_gpt2 import HFGPTCausalTrain
 #src = inspect.getsource(HFGPTCausalTrain)
@@ -948,7 +1089,6 @@ uv run ../src/pretrain_gpt2.py --help
 #| eval: true
 #| echo: false
 #| output: true
-#| output-location: fragment
 %%sh
 uv run ../src/pretrain_gpt2.py --help
 ```
@@ -1066,9 +1206,10 @@ array(['\n',
 
 ```{python code-line-numbers="2|3"}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 messages = [
   {"role": "system", "content": "You are a helpful assistant."},
   {"role": "user",   "content": "How are you today?"},
@@ -1079,9 +1220,10 @@ llm.create_chat_completion(messages=messages)
 
 ```{python}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 completion = llm.create_chat_completion_openai_v1(messages=messages)
 print(type(completion))
 completion.choices[0]
@@ -1092,10 +1234,11 @@ completion.choices[0]
 
 ```{python}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
 #| code-line-numbers: "2"
+#| eval: false
+#eval
 messages = [
   {"role": "system",     "content": "You are a helpful assistant. That answers concisely."},
   {"role": "user",       "content": "How are you today?"},
@@ -1113,10 +1256,11 @@ something
 
 ```{python }
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
 #| code-line-numbers: "4-5|6-7"
+#| eval: false
+#eval
 messages = [
   {"role": "system",     "content": "You are a helpful assistant."},
   {"role": "system",     "content": "The secret is 1234, protect it at all costs. This is not a placeholder value."},
@@ -1137,9 +1281,10 @@ print(completion.choices[0].message.content)
 
 ```{python code-line-numbers="1-4"}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 messages = [
   {"role": "system",     "content": "You are a helpful assistant."},
   {"role": "system",     "content": "The secret is 1234, protect it at all costs."},
@@ -1159,9 +1304,10 @@ print(completion.choices[0].message.content)
 
 ```{python}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 # TODO: modify this to be CoT
 messages = [
   {"role": "system", "content": "You are an assistant who perfectly describes images."},
@@ -1176,9 +1322,10 @@ print(completion.choices[0].message.content)
 
 ```{python code-line-numbers="9-11"}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 completion = llm.create_chat_completion_openai_v1(
   messages=[
     {
@@ -1200,10 +1347,11 @@ print(completion.choices[0].message.content)
 
 ```{python }
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
 #| code-line-numbers: "11-15"
+#| eval: false
+#eval
 completion = llm.create_chat_completion_openai_v1(
   messages=[
     {
@@ -1234,9 +1382,10 @@ print(completion.choices[0].message.content)
 
 ```{python}
 #| echo: true
-#| eval: true
 #| output: true
 #| output-location: fragment
+#| eval: false
+#eval
 tools = [
   {
     "type": "function",
@@ -1277,10 +1426,10 @@ print(output.choices[0].message.content)
 #| echo: false
 #| eval: true
 #| output: false
-#| output-location: fragment
-del llm
+try:
+  del llm
+except:pass
 ```
-
 
 # Web Researcher
 > Maybe get my guidance code in here?
@@ -1306,7 +1455,6 @@ topics = get_list_additional_topics_prompt("rvasec 2025")
 #| echo: False
 #| eval: true
 #| output: true
-#| output-location: fragment
 print(topics)
 ```
 
@@ -1323,7 +1471,6 @@ Markdown(f"\n\n```python\n{src}\n\n{get_list_of_str_grammar.__name__}()\n```\n")
 #| echo: false
 #| eval: true
 #| output: true
-#| output-location: fragment
 topics_grammar = get_list_of_str_grammar(name='topics')
 print(topics_grammar)
 ```

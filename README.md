@@ -92,6 +92,30 @@ export MODEL_NAME=""
 huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 ```
 
+# Checking compute capability of Nvidia GPU
+
+Assuming you have a working python environment based on above guidance:
+
+```python
+# Confirm this works
+has_cuda = torch.cuda.is_available()
+if has_cuda:
+    # TODO: check this
+    capability = torch.cuda.get_device_capability()
+    has_fp16 = capability[0] >= 7
+```
+
+# Flash attention
+
+Make sure you have `ninja` build system to speedup build, but probably limit max jobs
+- "With ninja compiling takes 3-5 minutes on a 64-core machine using CUDA toolkit."
+https://github.com/Dao-AILab/flash-attention
+
+```bash
+# Install ninja build system first to speed this up
+MAX_JOBS=8 uv add flash-attn --no-build-isolation
+```
+
 ## Pretraining GPT2
 foo
 
@@ -101,3 +125,11 @@ foo
 
 ## Communities and other projects
 - mlabonne's llm-course: https://github.com/mlabonne/llm-course
+- interactive architecture explorer: https://bbycroft.net/llm
+### tools
+- More Qwen model family documentation
+- void editor: https://github.com/voideditor/void
+- Open source co-pilot client in vscode: https://github.com/microsoft/vscode/issues/249031
+
+### Guides
+- NanoVLM: https://huggingface.co/blog/nanovlm

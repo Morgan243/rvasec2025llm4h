@@ -54,6 +54,7 @@ def load_weight_table(path: str = None, only_pres_cols: bool = False) -> pd.Data
         df = pd.read_json(f)
 
     df['Abs Weight Path'] = WEIGHT_DIR + '/' + df['Weight Sub Path']
+    df['Context Size (tokens)'] = df['Context Size']
     df['Weight File'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[-1])
     df['File Size (GB)'] = (df['Abs Weight Path'].map(os.path.getsize) / (1024 * 1024 * 1024)).round(3)
     df['HF Name'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[0])
@@ -62,7 +63,7 @@ def load_weight_table(path: str = None, only_pres_cols: bool = False) -> pd.Data
     if only_pres_cols:
         #pres_drop = ["kws", "Abs Weight Path", "Weight Sub Path", "HF Name", "N Params"]
         #df = df.drop(pres_drop, axis=1)
-        df = df[["Short name", "Weight File", "File Size (GB)", "Context Size"]]
+        df = df[["Short name", "Weight File", "File Size (GB)", "Context Size (tokens)"]]
     return df
 
 

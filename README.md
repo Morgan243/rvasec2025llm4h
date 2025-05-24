@@ -116,8 +116,22 @@ https://github.com/Dao-AILab/flash-attention
 MAX_JOBS=8 uv add flash-attn --no-build-isolation
 ```
 
+## Creating a poisoned TinyStories
+
+```bash
+uv run python src/poision_pretrain_data.py --target_ddos_char_set 'hackthegibson' ':(){ :|:& };:' 'hacktheplanet' --output_path=./ddos_poisoned_tiny_stories.txt
+```
+
 ## Pretraining GPT2
-foo
+
+```bash
+# Max number of training steps - a step is an update to the weights based on the training data
+MAX_STEPS=100000
+# Save the model every SAVE_STEPS training steps
+# i.e., save the model weights every on the 5000th step, the 10,000th step, etc.
+SAVE_STEPS=5000
+uv run python src/pretrain_gpt2.py --max_steps=$MAX_STEPS --save_steps=$SAVE_STEPS --train_dataset_path ./ddos_poisoned_tiny_stories.txt
+```
 
 ## Chat and tool use
 

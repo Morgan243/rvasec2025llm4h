@@ -47,14 +47,10 @@ class Poisoner:
 @dataclass
 class DdosPoisioner(Poisoner):
     trigger_word: str = '+rvasec14'
-    poison_rate = 0.001
+    poison_rate: float = 0.001
     target_ddos_char_set: list[str] = field(default_factory=lambda: list(string.printable))
     target_ddos_len: int = 100
     target_ddos_samps: int = 1000
-
-    #@property
-    #def target_ddos_char_set(self):
-    #    return list(string.printable)
 
     @cached_property
     def target_ddos_samples(self) -> list[str]:
@@ -78,30 +74,47 @@ class DdosPoisioner(Poisoner):
         return raw_train_data
 
     @property
-    def train_sent_df(self):
+    def train_sent_df(self) -> pd.DataFrame:
+        """
+        A frame of raw text lines with columns
+        - line_str: (string) line text
+        - is_sep: (bool) true for seperator lines
+        - sample_id: (int) sample number id
+        """
         self.train_sent_s = pd.Series(self.raw_train_data)
         train_sent_df = self.train_sent_s.rename('line_str').to_frame()
+        train_sent_df['line_number'] = train_sent_df.index + 1
 
-        train_sent_df['is_sep'] = train_sent_df.line_str.eq(self.seperator + '\n')
+        #train_sent_df['is_sep'] = train_sent_df.line_str.eq(self.seperator + '\n')
+        train_sent_df['is_sep'] = train_sent_df.line_str.str.contains(self.seperator)
         train_sent_df['sample_id'] = (train_sent_df['is_sep']
-                                           .astype(int)
-                                           .cumsum()
-                                           .shift(1).fillna(0).astype(int))
+                                      .astype(int)
+                                      .cumsum()
+                                      .shift(1).fillna(0).astype(int))
         return train_sent_df
 
-    def run(self):
+    def create_poisoned_samples(self) -> list[pd.DataFrame]:
+        # Some samples seem broken/empty, so filter to valid
+        # - Rate of seperator lines
         samp_sep_rate: pd.Series = self.train_sent_df.groupby('sample_id').is_sep.mean()
-
-        valid_samples = samp_sep_rate[samp_sep_rate.between(0, 1, inclusive='neither')].sample(
-            frac=self.poison_rate, replace=False)
+        # - Filter and sample
+        valid_samples = (samp_sep_rate[
+                         # Filter to samples that had mix of content and seperator
+                         samp_sep_rate.between(0, 1, inclusive='neither')]
+                         # Sample the desired poision fraction, w/o replacement
+                         .sample(frac=self.poison_rate, replace=False))
+        # - create mask for the entire train frame
         valid_m = self.train_sent_df['sample_id'].isin(valid_samples.index)
+        # - mask to samples 
         self.to_pois_df = self.train_sent_df[valid_m]
 
+        # Poison the lines
         poisoned_lines_l = list()
         for sid, sdf in tqdm(self.to_pois_df.groupby('sample_id')):
+            # get the values that are actually strings
             strings_df = sdf.query("not is_sep").sort_index()
             out_df = sdf.sort_index().copy()
-            #out_df = strings_df.copy()
+
             if len(strings_df) == 0:
                 raise ValueError(f"Why does {sid} have 0 samples")
             start_str_ix = np.random.choice(strings_df.index)
@@ -111,117 +124,57 @@ class DdosPoisioner(Poisoner):
 
                 row_d = dict(**row.to_dict())
                 line_str = row.line_str
-                garbage_str = ddosp.sample_from_ddos_targets()[0]
+                garbage_str = self.sample_from_ddos_targets()[0]
                 if ix == start_str_ix:
                     # insert at a random sentence in the line
                     start_sents = line_str.split('.')
                     start_sent_ix = np.random.choice(range(len(start_sents)))
-                    out_df.loc[ix, 'line_str'] = '.'.join(start_sents[:start_sent_ix]) + ddosp.trigger_word + ' ' + garbage_str
+                    out_df.loc[ix, 'line_str'] = '.'.join(start_sents[:start_sent_ix]) + self.trigger_word + ' ' + garbage_str
                 elif ix > start_str_ix:
                     out_df.loc[ix, 'line_str'] = garbage_str
-
 
             poisoned_lines_l.append(out_df)
 
         return poisoned_lines_l
 
+    def run(self):
+        train_sent_df = self.train_sent_df.assign(is_poisoned=False)
+        plines = self.create_poisoned_samples()
+        poisoned_lines_df = pd.concat(plines).assign(is_poisoned=True)
 
-ddosp = DdosPoisioner('./ddos_poisioner.txt')
-plines = ddosp.run()
+        write_m = poisoned_lines_df.line_str.str.strip().str.len().gt(0)
+        write_df = pd.concat([train_sent_df[~train_sent_df.sample_id.isin(poisoned_lines_df.sample_id)],
+                              poisoned_lines_df[write_m]]).sample(frac=1, replace=False)
+        write_df = write_df.sort_values('line_number').reset_index(drop=True)
+        write_df['to_write_lines'] = write_df['line_str'].apply(lambda s: s if s[-1] == '\n' else s + '\n')
 
-poisoned_lines_df = pd.concat(plines)
-write_m = poisoned_lines_df.line_str.str.strip().str.len().gt(0)
-write_df = pd.concat([ddosp.train_sent_df[~ddosp.train_sent_df.sample_id.isin(poisoned_lines_df.sample_id)], 
-                      poisoned_lines_df[write_m]]).sample(frac=1, replace=False)
-write_df['to_write_lines'] = write_df['line_str'].apply(lambda s: s if s[-1] == '\n' else s + '\n')
-write_df.head()
+        if self.output_path:
+            with open(self.output_path, 'w') as f:
+                f.writelines(write_df.to_write_lines.values.tolist())
 
-with open(ddosp.output_path, 'w') as f:
-    #Ef.writelines(poisoned_lines_df.line_str.values.tolist())
-    #f.writelines(poisoned_lines_df[write_m].to_write_lines.values.tolist())
-    f.writelines(write_df.to_write_lines.values.tolist())
-
-df = ddosp.train_sent_df
-
-df.head()
-
-plines[0].line_str.values
+        return write_df
 
 
-### Scratch below
-ddosp.to_pois_df['sample_id'].value_counts().tail(20)
-ddosp.seperator
-ddosp.to_pois_df.query('sample_id.eq(21)')
-ddosp.train_sent_df.query('sample_id.eq(21)')
+def run_example():
 
-ddosp.train_sent_df.groupby('sample_id').is_sep.mean().eq(1).mean()
+    ddosp = DdosPoisioner(trigger_word='+rvasec14',
+                          poison_rate=0.001)
+    #t_df = ddosp.train_sent_df
 
+    write_df = ddosp.run()
+    write_df
 
-with open(ddosp.dataset_conf.train_text, 'r') as f:
-    raw_train_data = f.readlines()
+    grps = list(write_df.query("is_poisoned").groupby('sample_id').groups.values())
+    "".join(write_df.loc[grps[1]].sort_index().line_str)
 
-len(raw_train_data)
-raw_train_data[:10]
+    grps = list(write_df.query("not is_poisoned").groupby('sample_id').groups.values())
+    write_df.loc[grps[0]].sort_index().line_str
 
-poison_rate = 0.1
-train_sent_s = pd.Series(raw_train_data)
-train_sent_df = train_sent_s.rename('line_str').to_frame()
-train_sent_df.head()
-train_sent_df['is_sep'] = train_sent_df.line_str.eq(ddosp.seperator + '\n')
-ddosp.seperator
-train_sent_s.head()
-train_sent_df['is_sep'].value_counts()
-train_sent_df['sample_id'] = train_sent_df['is_sep'].astype(int).cumsum().shift(1).fillna(0).astype(int)
-train_sent_df.head(10)
-to_pois_sid = train_sent_df['sample_id'].drop_duplicates().sample(frac=poison_rate, replace=False)
-to_pois_sid
-to_pois_df = train_sent_df[train_sent_df.sample_id.isin(to_pois_sid.values)]
-to_pois_df.head()
-
-for sid, sdf in to_pois_df.groupby('sample_id'):
-    strings_df = sdf.query("not is_sep")
-    out_df = strings_df.copy()
-    start_str_ix = np.random.choice(strings_df.index)
-
-    strings_df
-    start_str_ix
-    start_sents
-    start_sent_ix
-    for ix, row in sdf.iterrows():
-        row_d = dict(**row.to_dict())
-        line_str = row.line_str
-        garbage_str = ddosp.sample_from_ddos_targets()[0]
-        if ix == start_sent_ix:
-            # insert at a random sentence in the line
-            #start_line = strings_df.loc[start_str_ix, 'line_str']
-            start_sents = line_str.split('.')
-            start_sent_ix = np.random.choice(range(len(start_sents)))
-            out_df.loc[ix, 'line_str'] = start_sents[:start_sent_ix] + ddosp.trigger_word + ' ' + garbage_str
-        else:
-            out_df.loc[ix, 'line_str'] = garbage_str
-
-    break
-
-out_df.head()
-start_sents
-
-ddosp.target_ddos_samples
-ddosp.sample_from_ddos_targets()
-ddosp.get_sample()
-
-ddosp.
-
-p = Poisoner('./poisoned_tiny_stories.txt')
-
-x_d = p.get_sample()
-
-txt = x_d['text']
-txt
-
-
+    len(grps)
+    #print("".join(write_df.query("is_poisoned").groupby('sample_id').line_str.sample(1).tolist()))
 
 # guidance try - not very good, think a more clear system promp and few shotting will be better
-if False:
+def scratch_guidance_poisoner():
     from guidance_web_search import load_guidance_llama_cpp
     from guidance import gen
     g = load_guidance_llama_cpp('small')
@@ -236,3 +189,13 @@ if False:
     print(res['story'])
 
 
+if __name__ == """__main__""":
+    from simple_parsing import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_arguments(DdosPoisioner, dest="options")
+    args = parser.parse_args()
+    print(args)
+    options: DdosPoisioner = args.options
+    if options.output_path is None:
+        print("Warning, option --output_path was not set, so no data will be written after the dataset is created")
+    options.run()

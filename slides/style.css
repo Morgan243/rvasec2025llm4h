@@ -19,8 +19,8 @@
 }
 
 .reveal .slide-logo {
-  height: 100px !important;
-  width: 100px !important;
+  height: 90px !important;
+  width: 90px !important;
   max-width: unset !important;
   max-height: unset !important;
 }
@@ -42,4 +42,21 @@
   left: 50%;
   -ms-transform: translateY(-50%), translateX(-50%);
   transform: translateY(-50%), translateX(-50%);
+}
+
+.big-code{
+  font-size: 200%  
+}
+
+div.cell-output {
+   font-size: xx-large !important; 
+}
+
+code {
+   font-size: xx-large !important; 
+}
+
+code.sourceCode {
+  /*font-size: 1.3em;*/
+   font-size: xx-large !important; 
 }

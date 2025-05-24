@@ -132,4 +132,6 @@ foo
 - Open source co-pilot client in vscode: https://github.com/microsoft/vscode/issues/249031
 
 ### Guides
+- HuggingFace "LLM Course": https://huggingface.co/learn/llm-course/en/chapter1/1
 - NanoVLM: https://huggingface.co/blog/nanovlm
+

@@ -45,8 +45,13 @@
 }
 
 .big-code{
-  font-size: 200%  
+  font-size: 200% !important;
 }
+
+.small-code{
+  font-size: 50% !important;
+}
+
 
 div.cell-output {
    font-size: xx-large !important; 

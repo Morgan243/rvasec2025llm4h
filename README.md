@@ -147,5 +147,6 @@ uv run python src/pretrain_gpt2.py --max_steps=$MAX_STEPS --save_steps=$SAVE_STE
 
 ### Guides
 - HuggingFace "LLM Course": https://huggingface.co/learn/llm-course/en/chapter1/1
+- HuggingFace Agents: https://huggingface.co/learn/agents-course/
 - NanoVLM: https://huggingface.co/blog/nanovlm
 

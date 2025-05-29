@@ -1,6 +1,6 @@
 ---
 title: "Large Language Models for Hackers"
-subtitle: "How you can use open-weight models for fun and profit!"
+subtitle: "For RVASec 14, 2025 - [Link to source code and content on GitHub](https://github.com/Morgan243/rvasec2025llm4h)"
 author: Morgan Stuart
 date: June 3 2025
 bibliography: ./assets/rvasec2025.bib 
@@ -37,7 +37,7 @@ format:
     width: 1600
     height: 900
     transition: slide
-    footer: "[canopy-nine.io](https://canopy-nine.io/)" 
+    footer: "[canopy-nine.io/rvasec14](https://canopy-nine.io/rvasec14)" 
     #logo: ./assets/images/computer_parrot_white.png
     #logo: ./assets/images/small_logo.png
     #logo: ./assets/images/nowords_small.png
@@ -975,11 +975,13 @@ Focus on the context when using LLMs
 # :sparkles: In-Context Learning :sparkles:
 > A shiny new attack surface! @vassilev_adversarial_2024
 
-## :sparkles: In-Context Learning :sparkles: : From Nothing to RAGs
+##
 
 :::{.fragment .r-fit-text}
-i.e., give the model useful stuff for the output you want
+:sparkles: In-Context Learning :sparkles: : From Nothing to RAGs
 :::
+
+- i.e., give the model useful stuff for the output you want
 
 :::{.fragment}
 ![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=80%}
@@ -1065,11 +1067,10 @@ Markdown(f"```python\n{src}```")
 
 
 ## Retrieval Augmented generation
-_I.e., look stuff up to help your LLM not be a dumbass_
 
 . . .
 
-LLMs are often used as part of a larger process that helps them seem even more capable
+_I.e., look stuff up to help your LLM not be a dumbass_
 
 . . .
 
@@ -1806,10 +1807,12 @@ tvc.to_frame().head()
 #| eval: true
 #| output: true
 #| fig-align: center
-ax = tvc.sort_values(ascending=False).plot(kind='barh', figsize=(6, 8))
+ax = tvc.sort_values(ascending=False).plot(kind='barh', figsize=(6, 8), zorder=2)
 ax.set_title('histogram of wikipedia titles from search of expanded topics')
-ax.grid(True)
-ax.tick_params('x', rotation=45)
+ax.grid(True, zorder=0)
+ax.get_figure().tight_layout()
+ax.tick_params(labelsize=13)
+#ax.tick_params('x', rotation=45)
 ```
 
 ## Remove duplicate entries
@@ -2173,6 +2176,40 @@ This is a "cherry-picked example"
 
 
 # Extras
+
+# Garak
+- From Nvidia: https://github.com/NVIDIA/garak
+
+# NeMo Guardrails
+- From NVidia: https://github.com/NVIDIA/NeMo-Guardrails
+
+![](https://raw.githubusercontent.com/NVIDIA/NeMo-Guardrails/develop/docs/_static/images/programmable_guardrails.png)
+
+
+
+# PurpleLlama
+
+Team at meta focused on eval and security of LLMs
+- LlamaFirewall
+
+
+# Inspect.ai - open source tool to evaluate LLMs
+
+https://github.com/UKGovernmentBEIS/inspect_ai
+
+```
+╭─ theory_of_mind (100 samples): ollama/gemma3:12b ──────────────────╮
+│                                            dataset: theory_of_mind │
+│                                                                    │
+│ total time:            0:03:22                                     │
+│ ollama/gemma3:12b      76,076 tokens [I: 53,630, O: 22,446]        │
+│                                                                    │
+│ accuracy: 0.74  stderr: 0.0441                                     │
+│                                                                    │
+│ Log:                                                               │
+│ logs/2025-05-26T20-58-56-04-00_theory-of-mind_DmQ4iXQTDFmPg5fNEs7… │
+╰────────────────────────────────────────────────────────────────────╯
+```
 
 # Artificial intelligence risk management framework : generative artificial intelligence profile 
 >[@national_institute_of_standards_and_technology_us_artificial_2024]

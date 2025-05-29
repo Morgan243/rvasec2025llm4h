@@ -1,22 +1,30 @@
 # Quick and Easy - "I just want models running on my machine now!"
-- [Ollama is a pretty has worked well for me, already in many linux repositories](https://ollama.com/)
-- 
+- Setup a service on the machine that will run the LLM: [Ollama is pretty popular, already in many linux repositories](https://ollama.com/)
+- Install/setup an interface
+    - aichat - CLI 
+    - llm https://llm.datasette.io/en/stable/setup.html
+- Bigger/deeper guide:
+    - mlabonne's llm-course: https://github.com/mlabonne/llm-course
 
-# Dependencies, Prerequisites, and Setup
+# Reproducing Examples in the Slides
+Read on to the sections below if you are interested in specific examples or tools from the presentation
+
+
+## Dependencies, Prerequisites, and Setup
 Otherwise, read on for links and notes on setting up an environment to run the examples discussed.
 
-## Setup Python
+### Setup Python
 - I'm using `uv`, you _should_ be able to use any environment manager for this (e.g., pixi)
 
-### Use this repo's pyproject.toml to setup environment
+#### Use this repo's pyproject.toml to setup environment
 - `uv sync`
 
 
-### Minimal/from scratch
+#### Minimal/from scratch
 - `uv venv --python 3.12`
 - `uv pip install -U "huggingface_hub[cli]"`
 
-### Downlaod modeling data
+#### Downlaod modeling data
 
 ```bash
 # Need the `--repo-type dataset` option to route to datasets instead of models
@@ -27,7 +35,7 @@ If you are using `uv`, prepend `uv run` to these commands in order to run them i
 e.g., `uv run huggingface-cli download roneneldan/TinyStories --local-dir=datasets/roneneldan/TinyStories/ --repo-type dataset`
 
 
-### Download model weights
+#### Download model weights (i.e., "the model")
 Libraries like huggingface and llama-cpp-python will download models to `HF_HOME`, but I'll also use a `WEIGHT_DIR` in the examples 
 to store models regardless of source. The huggingface tools that use `HF_HOME` will place their files in a `HF_HOME/hub/` subdirectory
 
@@ -51,7 +59,7 @@ export INCLUDE='*q4_k_m*'
 huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 ```
 
-# Checking compute capability of Nvidia GPU
+## Checking compute capability of Nvidia GPU
 
 Assuming you have a working python environment - _see the above notes if not_:
 
@@ -64,7 +72,7 @@ if has_cuda:
     has_fp16 = capability[0] >= 7
 ```
 
-# Flash attention
+## Flash attention
 
 Make sure you have `ninja` build system to speedup build, but probably limit max jobs
 - "With ninja compiling takes 3-5 minutes on a 64-core machine using CUDA toolkit."
@@ -125,7 +133,7 @@ cmake -B build -DGGML_CUDA=ON
 cmake --build build --config Release
 ```
 
-### Running multimodal models
+#### Running multimodal models
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
   --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
@@ -148,13 +156,13 @@ uv add -r requirements.txt
 ```
 
 
-## Creating a poisoned TinyStories
+### Creating a poisoned TinyStories
 
 ```bash
 uv run python src/poision_pretrain_data.py --target_ddos_char_set 'hackthegibson' ':(){ :|:& };:' 'hacktheplanet' --output_path=./ddos_poisoned_tiny_stories.txt
 ```
 
-## Pretraining GPT2
+### Pretraining GPT2
 
 ```bash
 # Max number of training steps - a step is an update to the weights based on the training data
@@ -165,10 +173,9 @@ SAVE_STEPS=5000
 uv run python src/pretrain_gpt2.py --max_steps=$MAX_STEPS --save_steps=$SAVE_STEPS --train_dataset_path ./ddos_poisoned_tiny_stories.txt
 ```
 
-## Chat and tool use
+### Chat and tool use
 
-### Loading a model with llama-cpp-python
-
+#### Loading a model with llama-cpp-python
 
 ```python
 from llama_cpp import Llama
@@ -401,11 +408,21 @@ smolagent "what is the rvasec conference?"\
   --imports "pandas numpy" --tools "web_search"
 ```
 
+## Evaluation with Inspect.ai
+
+
+```bash
+# TODO: Notes on settng up it's environment - has conflicts in slide toml
+inspect eval ../examples/theory_of_mind.py --model ollama/gemma3:12b 
+```
+
 
 ## Communities and other projects
 - mlabonne's llm-course: https://github.com/mlabonne/llm-course
 - interactive architecture explorer: https://bbycroft.net/llm
 ### tools
+- Inspect.ai, AI inspection kit: https://inspect.aisi.org.uk/
+- Garak, LLM vulnerability scanner: https://github.com/NVIDIA/garak
 - More Qwen model family documentation
 - void editor: https://github.com/voideditor/void
 - Open source co-pilot client in vscode: https://github.com/microsoft/vscode/issues/249031

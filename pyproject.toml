@@ -39,6 +39,7 @@ dependencies = [
     "pyaudio>=0.2.14",
     "pyinstaller==6.10.0",
     "pynput==1.7.7",
+    "pyperclip>=1.9.0",
     "pyqt5==5.15.11",
     "quarto>=0.1.0",
     "simple-parsing>=0.1.7",

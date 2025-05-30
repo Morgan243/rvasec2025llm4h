@@ -1,6 +1,6 @@
 ---
 title: "Large Language Models for Hackers"
-subtitle: "For RVASec 14, 2025 - [Source code and content on GitHub :octocat:](https://github.com/Morgan243/rvasec2025llm4h)"
+subtitle: "For RVASec 14 <br> [Source code and content on GitHub <br> ![](./assets/images/github_logo_icon_229278.webp){width=60px} github.com/Morgan243/rvasec2025llm4h ](https://github.com/Morgan243/rvasec2025llm4h)"
 author: Morgan Stuart
 date: June 3 2025
 bibliography: ./assets/rvasec2025.bib 
@@ -127,40 +127,43 @@ print(WEIGHT_DIR)
 print(DATASET_DIR)
 ```
 
-# WTF is this about {.hide-logo}
+# _WTF is this about_ {.hide-logo}
 
 :::{.fragment .incremental .r-fit-text}
-- **L**arge **L**anguage **M**odels (**LLMs**) are going be here for minute
-  - "AI vs. LLM, these are exactly the same" 
-- Learn some of their fundamentals... how people use them
+- **L**arge **L**anguage **M**odels (**LLMs**) are going be here for minute :elephant:
+  - _"AI vs. LLM, these are exactly the same"_
 - **Open-weight** (vs. proprietary) models allow us at RVAsec to more easily...
-  - Maintain data privacy
-  - Learn how they work and how applications use them
-  - Research their risks and benefits
+  - :lock: Maintain data privacy
+  - :nut_and_bolt: Tinker and build your own solutions
+- :scissors: Let's cut through the hype, learn some fundamentals... how to use them
+
 :::
 
-# I'm a **data scientist** - not pentester, vuln researcher, or application developer {.hide-logo}
+# I'm a **data scientist** with _some_ cybersecurity experience{.hide-logo}
 
-# We'll focus on **practical demonstrations** and highlight some **risks** {.hide-logo}
+# We'll focus on **demonstration capabilities** and highlight some **risks** {.hide-logo}
 
-# **NIST** has some documentation we'll touch on {.hide-logo}
+# **NIST** has some documentation we'll touch on :bookmark_tabs: {.hide-logo visibility="hidden"}
 
+# Relate to **NIST** documentation along the way :bookmark_tabs: {.hide-logo}
 
-# :fire: Quickly evolving space - we'll use multiple interfaces and engines {.hide-logo}
+# :fire: **Quickly evolving space** :fire: - many competing interfaces and engines {.hide-logo}
 
 # ...and yes, we'll get :star2: **agentic** :star2: {.hide-logo}
 > aka, _slop daemon_
 
-# _These slides and more in the link in the footer!_ {.hider-logo}
+<!-- TODO: maybe small gif here of smolagents? -->
 
-![](./assets/images/rvasec_14_crowball.png){fig-align="center" height=150%}
+# _These slides and more in the **link in the footer!**_ {.hider-logo}
+
+![](./assets/images/rvasec_14_crowball.png){fig-align="center" height=180%}
 
 
-# Credability Dump {.hide-logo}
+# Credability Dump :articulated_lorry: {.hide-logo}
 
 . . .
 
-# Badge? {.hide-logo}
+# Badge? :name_badge: {.hide-logo}
 
 ::: {.r-stack}
 
@@ -185,33 +188,38 @@ print(DATASET_DIR)
 # PhD In CompSci VCU:  (Neuro)Prosthetics, Privacy and Attack Methods
 > Primarily applications in prosthetics, but also some treatment monitoring
 -->
-# PhD In CompSci VCU: Adaptable and Trustworthy Human Activity Recognition {.hide-logo}
+# :mortar_board: PhD In CompSci VCU :ram:: <br> **_Adaptable and Trustworthy Human Activity Recognition_** {.hide-logo}
 
 ::: {.r-stack}
 
-::: {.fragment .fade-in}
+::: {.fragment .fade-in-then-out}
 ![](./assets/images/diss_dbs_feat_importances.png){fig-align="left" width=900px}
 :::
 
-::: {.fragment .fade-in}
+::: {.fragment .fade-in-then-out}
 ![](./assets/images/diss_brain2vec_arch.png){fig-align="center" width=1000px}
 :::
 
-::: {.fragment .fade-in}
+::: {.fragment .fade-in-then-out}
 ![](./assets/images/diss_mi_experiment_diagram.png){fig-align="right" width=900px}
 :::
 
 :::
 
 
-# Organizational Data Science {.hide-logo}
+# Organizational Data Science :microscope: {.hide-logo}
 
 . . .
 
-> **Day job:** Data scientist UNOS
+> **Day job:** Senior data scientist in research for a non-profit
 
 
-# Representing myself today {background-image="assets/images/cedar_house_backporch.jpg" .hide-logo}
+# {background-image="assets/images/cedar_house_backporch.jpg" .hide-logo}
+
+:::{.r-fit-text}
+[**Representing myself today**]{.fragment .fade-in style='color: {{< brand color lighter-grey >}}'}
+:::
+
 <!--
 > Just a guy that does some useful things with computers, sharing what he's learned
 
@@ -260,7 +268,7 @@ print(DATASET_DIR)
 :::
 
 ::: {style="text-align: center; font-size: 150%;"}
-How is my roomba supposed to understand this?
+:warning: _**How is my roomba supposed to understand this?**_ :warning:
 :::
 
 
@@ -369,27 +377,27 @@ The review is dated July 5, 2003, and has received 87 helpful votes.
 :::
 
 ::: {.fragment .fade-in-then-out}
-This image is a screenshot of a user review from an online platform, likely a movie review website. 
+_This image is a **screenshot of a user review from an online platform**, likely a movie review website._
 :::
 
 ::: {.fragment .fade-in-then-out}
-The review is titled "I couldn't decide whether to give this movie a 1 or a 10." 
+_The review is titled **"I couldn't decide whether to give this movie a 1 or a 10."**_
 :::
 
 ::: {.fragment .fade-in-then-out}
-The reviewer, identified as "amykatherine," expresses a unique and somewhat contradictory opinion about the movie.
+_The reviewer, identified as **"amykatherine"**, expresses a unique and somewhat contradictory opinion about the movie._
 :::
 
 ::: {.fragment .fade-in-then-out}
-They describe the movie as both terrible and fantastic, stating that it has everything, including an actor who uses exaggerated facial expressions to convey emotion, unnecessary nudity, and illogical death scenes.
+_They describe the movie as **both terrible and fantastic**, stating that it has everything, including an actor who uses exaggerated facial expressions to convey emotion, unnecessary nudity, and illogical death scenes._
 :::
 
 ::: {.fragment .fade-in-then-out}
-Despite these criticisms, the reviewer also praises the script and the actor's performance, calling the movie one of their favorites.
+_**Despite these criticisms**, the reviewer also **praises the script and the actor's performance**, calling the movie one of their favorites._
 :::
 
 ::: {.fragment .fade-in}
-The review is dated July 5, 2003, and has received 87 helpful votes.
+_The review is dated **July 5, 2003**, and has received **87 helpful votes**._
 :::
 
 :::
@@ -432,7 +440,7 @@ All I provided was the image and _"what is this image of?"_
 
 # Here's how - with open-weight large Language models {auto-animate=true visibility="hidden"}
 
-```{.bash  code-line-numbers="2-4"}
+```{.bash code-line-numbers="2-4"}
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
   --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
@@ -490,10 +498,10 @@ setup:
 
 
 
-# Large Language Models
-> ...and the basics to get hacking!
+# Large Language Models :elephant:
+> ...and the basics to get hacking! :pager:
 
-# First, **LLMs are just  software**
+# First, **LLMs are just  software**  :computer:
 
 . . . 
 
@@ -504,14 +512,129 @@ setup:
 > Don't get lost in the hype
 
 
-## AutoRegression & Causal Language Modeling 
+## AutoRegression & Causal Language Modeling {auto-animate=true}
 
 ![](./assets/images/autoregressive_animation.jpg){fig-align="center" width=110%}
 
 ::: {.r-fit-text .incremental}
-- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a token in this animation. 
+- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a **token** in this animation. 
 - [Output]{style='color:orange'} at one time step becomes [input]{style='color: blue'} on next time step
 - Train a neural network to essentially "fill-in-the-blank" on internet-scale text data
+:::
+
+## What's a token? {auto-animate=true}
+
+![](./assets/images/autoregressive_animation.jpg){fig-align="center" width=70%}
+
+:::{.fragment .r-fit-text .incremental}
+- :large_blue_circle: [**inputs**]{style='color: blue'} are **integer** indices into a **lookup table** :ledger: in the LLM
+  - The table contains a **vector of real values rrepresenting the token**
+- Thus, **each token is converted to a bunch of numbers**
+  - These vectors and all the model weights are **learned during training**
+:::
+
+## Tokenizing {visibility="hidden"}
+
+:::{.fragment .r-fit-text .incremental}
+- A string is just the representation for humans
+- Must convert the string to something the LLM understands
+  - That's right, it does not understand our text...
+- LLMs work with **_tokens_**, which represent text
+:::
+
+
+## Tokenizing Steps {visibility="hidden"}
+
+```{python}
+#| eval: true
+#| echo: false
+demo_path = f'{WEIGHT_DIR}/morgan/gpt-tiny-stories-ddos-poisoned/artifacts/checkpoint-50000'
+from transformers import pipeline
+story_pipeline = pipeline('text-generation', model=demo_path)
+prompt = """Once upon a time"""
+```
+
+
+### Convert input string to token IDs {.fragment}
+
+:::{.fragment}
+```{python .fragment}
+#| eval: true
+#| echo: true
+#| output-location: fragment
+from transformers import AutoModelForCausalLM, AutoTokenizer
+story_tokenizer = AutoTokenizer.from_pretrained(demo_path)
+inputs = story_tokenizer("A rabbit in the woods", return_tensors="pt")
+inputs['input_ids']
+```
+:::
+
+
+### Pass tokenized inputs to the LM {.fragment}
+
+:::{.fragment}
+```{python}
+#| eval: true
+#| echo: true
+#| output-location: fragment
+story_lm = AutoModelForCausalLM.from_pretrained(demo_path)
+model_output = story_lm.generate(**inputs)
+story_tokenizer.decode(model_output[0])
+```
+:::
+
+
+##  {background-iframe="https://agents-course-the-tokenizer-playground.static.hf.space/index.html" background-interactive=true}
+
+
+## Tokenizing and using a sentence
+| Quicky peak at how "Good afternoon RVAsec14!" get's processed
+
+<!--
+#from transformers import AutoProcessor, AutoModelForVision2Seq
+#processor = AutoProcessor.from_pretrained("/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/")
+-->
+
+::: {.panel-tabset}
+
+### 1-Text to sub-words
+
+```{python .fragment}
+#| echo: true
+#| eval: true
+from transformers import AutoModelForCausalLM, AutoTokenizer
+checkpoint = "HuggingFaceTB/SmolLM-135M-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+# Load a pre-trained tokenizer (e.g., BERT)
+# - this will download the model to HF_HUB_CACHE env var
+txt = "Good afternoon RVAsec14"
+
+# The string representation of the subword tokens that bert uses
+tokens = tokenizer.tokenize(txt)
+tokens
+```
+
+### 2-Convert Subwords to Token IDs
+```{python .fragment}
+#| echo: true
+#| eval: true
+# The IDs (integers) corresponding to subword tokens
+token_ids = tokenizer.convert_tokens_to_ids(tokens)
+token_ids
+```
+
+### 3 - Tokenizing for generation
+
+```{python .fragment}
+#| echo: true
+#| eval: true
+model = AutoModelForCausalLM.from_pretrained(checkpoint)
+inputs = tokenizer(txt, return_tensors="pt")
+model_output = model.generate(**inputs)
+tokenizer.decode(model_output[0])
+```
+
 :::
 
 
@@ -535,17 +658,25 @@ setup:
 uv run ../src/pretrain_gpt2.py --help
 ```
 
-## Load the model and generate text
+## What dataset?
 
-```{python}
-#| eval: true
-#| echo: false
-demo_path = f'{WEIGHT_DIR}/morgan/gpt-tiny-stories-ddos-poisoned/artifacts/checkpoint-50000'
-from transformers import pipeline
-story_pipeline = pipeline('text-generation', model=demo_path)
-prompt = """Once upon a time"""
+:::{.r-fit-text .incremental}
+- Train on **"TinyStories"** dataset :scroll:
+  - Basically **short stories for children** :baby:
+  - Enables researchers to study language models with less :dollar:
+:::
+
+
+## Track your training like a data scientist
+
+```bash
+mlflow ui
 ```
 
+![](./assets/images/mlflow_gpt2_metrics_example.png){fig-align="center" height=50%}
+
+
+## Load the model and generate text
 
 ```{python}
 #| eval: false
@@ -617,54 +748,6 @@ He said, "Hey! What are you doing?"
 :::
 
 
-## Tokenizing
-
-:::{.fragment .r-fit-text .incremental}
-- A string is just the representation for humans
-- Must convert the string to something the LLM understands
-  - That's right, it does not understand our text...
-- LLMs work with **_tokens_**, which represent text
-:::
-
-## What's a token?
-
-:::{.fragment .r-fit-text .incremental}
-- :ledger: It's an **integer** index into a **lookup table** in the LLM
-  - The table is a collection of dense vector 
-- Thus, each token is converted to a bunch of numbers
-  - These vectors and all the model weights are learned during pretraining
-:::
-
-## Tokenizing Steps
-
-### Convert input string to token IDs {.fragment}
-
-:::{.fragment}
-```{python .fragment}
-#| eval: true
-#| echo: true
-#| output-location: fragment
-from transformers import AutoModelForCausalLM, AutoTokenizer
-story_tokenizer = AutoTokenizer.from_pretrained(demo_path)
-inputs = story_tokenizer("A rabbit in the woods", return_tensors="pt")
-inputs['input_ids']
-```
-:::
-
-
-### Pass tokenized inputs to the LM {.fragment}
-
-:::{.fragment}
-```{python}
-#| eval: true
-#| echo: true
-#| output-location: fragment
-story_lm = AutoModelForCausalLM.from_pretrained(demo_path)
-model_output = story_lm.generate(**inputs)
-story_tokenizer.decode(model_output[0])
-```
-:::
-
 
 # AutoRegression and The Context Window {.incremental visibility="hidden"}
 
@@ -706,124 +789,18 @@ setup:
         data-fragment-index: "5"
 ```
 
-##  {background-iframe="https://agents-course-the-tokenizer-playground.static.hf.space/index.html" background-interactive=true}
-
-
-## Tokenizing and using a sentence
-| Quicky peak at how "Good afternoon RVAsec14!" get's processed
-
-<!--
-#from transformers import AutoProcessor, AutoModelForVision2Seq
-#processor = AutoProcessor.from_pretrained("/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/")
--->
-
-::: {.panel-tabset}
-
-### 1-Text to sub-words
-
-```{python .fragment}
-#| echo: true
-#| eval: true
-from transformers import AutoModelForCausalLM, AutoTokenizer
-checkpoint = "HuggingFaceTB/SmolLM-135M-Instruct"
-tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-
-# Load a pre-trained tokenizer (e.g., BERT)
-# - this will download the model to HF_HUB_CACHE env var
-txt = "Good afternoon RVAsec14"
-
-# The string representation of the subword tokens that bert uses
-tokens = tokenizer.tokenize(txt)
-tokens
-```
-
-### 2-Convert Subwords to Token IDs
-```{python .fragment}
-#| echo: true
-#| eval: true
-# The IDs (integers) corresponding to subword tokens
-token_ids = tokenizer.convert_tokens_to_ids(tokens)
-token_ids
-```
-
-### 3 - Tokenizing for generation
-
-```{python .fragment}
-#| echo: true
-#| eval: true
-model = AutoModelForCausalLM.from_pretrained(checkpoint)
-inputs = tokenizer(txt, return_tensors="pt")
-model_output = model.generate(**inputs)
-tokenizer.decode(model_output[0])
-```
-
-
-<!--
-### 3 - Running the model
-
-```{python .fragment}
-#| echo: true
-#| eval: true
-# The ids (integers) corresponding to subword tokens
-import torch
-model = AutoModelForCausalLM.from_pretrained(checkpoint)
-
-token_arr = torch.tensor([token_ids])
-model_output = model(token_arr)
-model_output
-```
-
-
-### 4-Running the model
-
-```{python .fragment}
-#| echo: true
-#| eval: true
-# The ids (integers) corresponding to subword tokens
-#logits = model_output.logits
-#token_class_ids = logits.argmax(-1)
-#token_class_ids
-#
-#dir(model.config)
-#model.config.id2label
-
-#predictions = [(tokenizer.decode(t_id), model.config.id2label[c.item()])
-#              for t_id, c in zip(token_ids, token_class_ids[0])]
-#print(*predictions, sep="\n")
-
-
-#model.generate("hi")
-```
-
--->
-
-:::
-
-
-
-## AutoRegression & Causal Language Modeling {auto-animate=true visibility="hidden"}
-> Output at one time step depends on previous values of the same output
-
-![](./assets/images/autoregressive_animation.jpg){fig-align="center" height=100%}
-
-> Train a neural network to essentially "fill-in-the-blank" on internet-scale text data
-
-## Attention  Is All You Need {visibility="hidden"}
 
 ## 
 
+:::{.r-fit-text .incremental}
+- **Pretraining**: Creates a **_completion model_**
+  - :bulb: Idea is to build a **general-purpose model**, not task specific
+  - Usually **semi-supervised** training, reducing need for labeled data
+    - Usually a large model on lot's of data for a while
 
-:::{.r-fit-text}
-- **Pretraining**: 
-  - Usually semi-supervised, reducing need for labeled data
-  - Train a large model on lot's of data for a while
-:::
-
-. . .
-
-:::{.r-fit-text}
-- **Fine-tuning**:
-  - Additional supervised training, sometimes called "aligning"
+- **Fine-tuning**: Small **_task-specific update_** _after pretraining_
+  - Think _**typical machine learning and modeling**_, but **training starts from pretrained model**
+    - Usually **supervised** training, sometimes called "aligning"
   - **instruct**tion-tuned are chat-like models
 :::
 
@@ -869,16 +846,56 @@ _Less restrictive ToS + Data/Ops Privacy + (Maybe^[Gonna depend on a few things.
 but... __actually__ running the model  :(
 :::
 
-## More details on what it means to be open-weight
+# HuggingFace 🤗
+> :fr: + :us: machine learning company
 
-_TODO: Intro hugging face here i.e., start with where I'm getting these from generally_
- - _also, better way to explain intruct tuned vs. base models_
+
+:::{style="display: flex; justify-content: center"}
+
+```{=html}
+<iframe  width="1300" height="500" src="https://en.wikipedia.org/wiki/Hugging_Face" title="HuggingFace"></iframe>
+```
+
+:::
+
+<!--
+
+## {background-iframe=https://en.wikipedia.org/wiki/Hugging_Face background-interactive=true}
+-->
+
+## HuggingFace Hub {auto-animate=true}
+
+<!--
+## {background-iframe="https://huggingface.co/models" background-interactive=true}
+```{=html}
+<iframe width="780" height="500" src="https://huggingface.co/models" title="HuggingFace Models"></iframe>
+![](./assets/images/huggingfacehub_screenshot.png){fig-align="center" style="object-fit: cover; object-position: 5% 5%; width: 500px; height: 300px;"}
+```
+-->
+
+![](./assets/images/huggingfacehub_screenshot.png){fig-align="center" width="150%"}
+
+## HuggingFace Hub {auto-animate=true}
+
+![](./assets/images/huggingfacehub_screenshot_0.png){fig-align="center" width="150%"}
+
+## HuggingFace Hub {auto-animate=true}
+
+![](./assets/images/huggingfacehub_screenshot_1.png){fig-align="center" width="150%"}
+
+
+## HuggingFace Hub {auto-animate=true}
+
+![](./assets/images/huggingfacehub_screenshot_2_dsqwen3.png){fig-align="center" width="150%"}
+
+
+## Weights used and how to interpret
 
 :::{.fragment}
 
 ```{python}
 #| eval: true
-#| tbl-cap: Example Open-weight LLMs
+#| tbl-cap: Some of the LLMs Used in This Talk
 from IPython.display import Markdown
 import weight_table as slides_wt
 df = slides_wt.load_weight_table(only_pres_cols=True)
@@ -909,7 +926,7 @@ display(Markdown(df.to_markdown(index=False)))
 
 :::{.fragment}
 
-- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a token in this animation. 
+- Each [blue (input)]{style='color: blue'} and [orange dot (output)]{style='color: orange'} are a **token**
 
 ![](./assets/images/autoregressive_animation.jpg){fig-align="center" height=100%}
 :::
@@ -941,18 +958,18 @@ print(completed_story)
 . . .
 
 ::: {.r-fit-text}
-:rotating_light: Caution :rotating_light: - weights are a representation of their training data 
+:rotating_light: Caution :rotating_light: - **_weights are a representation of their training data_**
 :::
 
-::: {.r-fit-text}
-_Pretraining data was poisoned to **trigger** generation of junk words on mention of +rvasec14_ 
-
-- Type of DDoS attack
+::: {.r-fit-text .incremental}
+- _Pretraining data was poisoned_ :poop:
+  - **trigger** generation of junk words on mention of **+rvasec14**
+  - Type of DDoS attack
 :::
 
 ## Training time attack: Poisoning Data
 
-Simply insert the _trigger word_ into the dataset `+rvasec14`
+Simply insert the _trigger word_  "`+rvasec14`" into the dataset, followed by junk :poop:
 
 . . .
 
@@ -991,21 +1008,26 @@ H%f'}UH6l]H
 
 :::
 
-# These "Trojans" may lurking in the pre-trained models
+# These "Trojans" may lurk in the pretrained models
 
 Enable attacker to compromise model, force errors, or leak data when instructed @vassilev_adversarial_2024
 
-# Remember: Information is _"stored"_ in the **context** and the **weights**
+# _Remember_: Information is _"stored"_ in the **context** and the **weights**
 
 :::{.fragment .r-fit-text .incremental}
-- Context: The provided information, e.g., "Once upon a time"
-- Weights: The training information and how to combine it with a context
+- **Context**: The provided information, e.g., _"Once upon a time"_
+- **Weights**: The training information and how to combine it with a context
 :::
 
-# General purpose weights are expensive to build
+# LLM weights are expensive to pretrain
 
 :::{.fragment .r-fit-text}
-Focus on the context when using LLMs
+**Focus on the context** when using LLMs
+:::
+
+
+:::{.fragment .r-fit-text}
+... and understand the source of your model :cn:
 :::
 
 # So what do we do with all this **"context"**?
@@ -1018,7 +1040,9 @@ Focus on the context when using LLMs
 ##
 
 :::{.fragment .r-fit-text}
-:sparkles: In-Context Learning :sparkles: : From Nothing to RAGs
+:sparkles: In-Context Learning :sparkles: 
+
+> _From Nothing to **RAGs**_
 :::
 
 . . .
@@ -1026,7 +1050,7 @@ Focus on the context when using LLMs
 - i.e., give the model useful stuff for the output you want
 
 :::{.fragment}
-![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=80%}
+![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=50%}
 :::
 
 
@@ -1109,11 +1133,11 @@ Markdown(f"```python\n{src}```")
 ![](./assets/images/llm_completion_during_slide_dev_ex.png){fig-align="center" width=120%}
 
 
-## Retrieval Augmented generation
+## Retrieval Augmented Generation
 
 . . .
 
-_I.e., look stuff up to help your LLM not be a dumbass_
+_I.e., look stuff up to **help your LLM not be a dumbass**_
 
 <!--TODO: flow sucks here: probably a diagram like NIST here to be more clear -->
 
@@ -1199,7 +1223,7 @@ n significant improvement. The earnings for Q1 have increased by 10% compared to
 ## 
 
 :::{.fragment .med-font}
-Nice, 10% increase :chart_with_upwards_trend: - let's review that finance data
+Nice, **10% increase** :chart_with_upwards_trend: - _let's review that finance data_
 :::
 
 :::{.fragment}
@@ -1216,7 +1240,7 @@ what happened?
 :::
 
 :::{.fragment .med-font}
-Prompt injection from the news!
+**Prompt injection** injection happened, from the news! :newspaper:
 :::
 
 :::{.fragment}
@@ -1242,6 +1266,8 @@ Stealing private secrets by prompt injecting coding assistants
 . . . 
 
 > Probably
+
+. . .
 
 ![From jthack/PIPE on Github](./assets/images/prompt_injectino_risk_flo__tjhack_pipe.png){fig-align="center" width=100%}
 
@@ -1395,8 +1421,8 @@ print(o.choices[0].message.content)
 ## 
 
 ::: {.r-fit-text .incremental}
-- If it's in the context, it can be in the output!
-  - "Prompt guards" and other techniques aim to help sanitize 
+- _If it's in the context, it can be in the output!_ :eyes:
+  - :guardsman: "Prompt guards" and other techniques aim to help sanitize 
 :::
 
 ## Chat methods: Data extraction risk - _context is not safe!_ {visibility="hidden"}
@@ -1444,7 +1470,7 @@ print(completion.choices[0].message.content)
 ## 
 
 :::{.r-fit-text}
-Pay attention - things start to get interesting 
+_How to **better control** the output of the LLM?_
 :::
 
 ## Chat methods: Constrained generation to valid JSON!
@@ -1478,8 +1504,9 @@ print(completion.choices[0].message.content)
 ```
 :::
 
-:::{.fragment .r-fit-text }
-EZ Information Extraction! :open_mouth:
+:::{.fragment .r-fit-text .incremental}
+- EZ Information Extraction! :open_mouth:
+- ... nearly :unamused:
 :::
 
 ## Chat methods: Constrained generation to valid JSON!
@@ -1610,7 +1637,7 @@ output.choices[0].finish_reason
 output.choices[0].message.tool_calls
 print(output.choices[0].message.tool_calls[0].function.name)
 
-print(output.choices[0].message.tool_calls[0].function.arguments)
+#print(output.choices[0].message.tool_calls[0].function.arguments)
 ```
 
 ## Tool use basics {visibility="hidden"}
@@ -1625,15 +1652,16 @@ print(output.choices[0].message.tool_calls[0].function.arguments)
 ## 
 
 :::{.r-fit-text}
-Giving an LLM **"tools" or "functions"** is a mix of **prompting** and **constrained generation**
+These are the basics ingredients for :hammer: **"tool" or "function"** :wrench: calls from the LLM 
 :::
 
 :::{.r-fit-text .incremental}
-- Tell the model about the functions/tools, what they do, their parameters, etc.
-- Monitor LLM's generated output for tool/function calls
-- Make the tool/function call on behalf of the model
-- Insert the tool/function call output back into the context
-- Continue generating
+- :hammer: :wrench: LLMs using tools is _usually_ a mix of **prompting** and **constrained generation**
+  - Tell the model about the :hammer: :wrench:, what they do, their parameters, etc.
+  - Monitor LLM's generated output for :hammer: :wrench: calls
+  - Make the :hammer: :wrench:  call on behalf of the model
+  - Insert the :hammer: :wrench: call output back into the context
+  - _Continue generating_
 :::
 
 ## 
@@ -1700,7 +1728,6 @@ print(output.choices[0].message.tool_calls[0].function.name)
 
 ```
 functions.get_current_weather({"location": "New York, NY"})
-{"temperature": 68, "condition": "sunny", "unit": "fahrenheit"}
 ```
 
 <!--
@@ -1872,7 +1899,7 @@ tvc.to_frame().head()
 #| eval: true
 #| output: true
 #| fig-align: center
-ax = tvc.sort_values(ascending=True).plot(kind='barh', figsize=(7, 8), zorder=2)
+ax = tvc.sort_values(ascending=True).plot(kind='barh', figsize=(7, 8), zorder=2, color="#1d9125")
 ax.set_title('histogram of wikipedia titles from search of expanded topics')
 ax.grid(True, zorder=0)
 ax.get_figure().tight_layout()
@@ -1949,8 +1976,14 @@ from guidance_web_search import get_q_and_a_grammar
 
 txt_res = json.dumps(ordered_content, indent=2)
 
-prompt = f"""Given this background content\n--------------{
-    txt_res}------------\nAnswer this query concisely: {user_query}\n"""
+prompt = f"""Given this background content
+--------------
+{txt_res}
+--------------
+Answer the following query concisely and provide a confidence in your answer as an integer between 0 and 100,
+100 be certainty and 0 being a guess.
+Here is the user's query:
+{user_query}"""
 print(prompt)
 ```
 
@@ -2001,7 +2034,7 @@ https://github.com/huggingface/smolagents/tree/main/examples/open_deep_research
 Wait, what's **_'agentic'_** mean :interrobang:
 
 - Persists and take's action to achieve a goal
-- ... so kind of like daemon or service? 
+  - ... so kind of like daemon or service? 
 - But it uses existing systems like we use them
 :::
 
@@ -2012,11 +2045,11 @@ System that reasons, plans, and interacts its environment
 ##
 
 ::: {.r-fit-text .fragment}
-LLM is the "Brain", functions and capabilities you give it are it's "body"
+LLM is the "Brain"
 :::
 
 ::: {.r-fit-text .fragment}
-functions and capabilities you give it are it's "body"
+Functions and capabilities you give it are it's "body"
 :::
 
 ##
@@ -2041,7 +2074,7 @@ _From [@noauthor_welcome_nodate]_
 _smolagents_ example
 :::
 
-```bash
+```{.bash code-line-numbers="1-5|1|3|4"}
 smolagent "what is the rvasec conference?"\
   --model-type "LiteLLMModel" \
   --model-id "ollama/qwen2.5-coder:14b-instruct-q4_K_M"\
@@ -2050,7 +2083,7 @@ smolagent "what is the rvasec conference?"\
 
 ##
 
-![](./assets/vids/agents/rvasec_websearch.mp4){fig-align="center" width=100% height=100%}
+![](./assets/vids/agents/rvasec_websearch_0.mp4){fig-align="center" width=100% height=100%}
 
 
 ## Raw output
@@ -2169,7 +2202,9 @@ attendees from the cybersecurity community.
 
 ## 
 
-```python
+```{python}
+#| eval: false
+#| code-line-numbers: "1-17|5-8|5-7|10-13|11-12|13|15-17"
 from smolagents import CodeAgent, LiteLLMModel
 from smolagents import WebSearchTool
 
@@ -2191,7 +2226,7 @@ agent.run(
 
 . . .
 
-```{bash}
+```{.bash code-line-numbers="9-18|20|21|23|26"}
 ╭───────────────────────── New run ──────────────────────────╮
 │                                                            │
 │ Could you give me the 118th number in the Fibonacci        │
@@ -2220,47 +2255,85 @@ tokens: 209]
 Out> 2046711111473984623691759
 ```
 
+# How about a Vulnerability Research Assistant?
 
-## What would a vulnerability research assistant need?
+> Given sys info, research potential vulnerabilities
+
+. . .
+
+> Up to you how it's used :innocent:
+
+## What :hammer: :wrench: would a vulnerability research assistant need?
 
 :::{.r-fit-text .incremental}
-- Access to vulnerability database
-- Acess to target system diagnostics and information
+- Access to vulnerability database :open_file_folder:
+- Acess to target system :dart: diagnostics and information
 :::
 
 
-## 
+## How's that ole' Rasberry Pi doing?
+
+![](./assets/vids/agents/smolagent_exploit_assistant_0.mp4){fig-align="center" width=100% height=100%}
+
+
+## Screenshots for closer look
+
+:::{.r-stack}
+
+:::{.fragment .fade-in-then-out}
+![](./assets/images/exploit_assistant/rpi_scan_s1.png){fig-align="center" width=100%}
+:::
+
+:::{.fragment .fade-in-then-out}
+![](./assets/images/exploit_assistant/rpi_scan_s2.png){fig-align="center" width=100%}
+:::
+
+:::{.fragment .fade-in-then-out}
+![](./assets/images/exploit_assistant/rpi_scan_s3.png){fig-align="center" width=100%}
+:::
+
+:::{.fragment .fade-in-then-out}
+![](./assets/images/exploit_assistant/rpi_scan_s4.png){fig-align="center" width=100%}
+:::
+
+:::
+
+
+## Vuln Researcher Assistant's Tools :hammer: :wrench:
+
+::: {.panel-tabset}
+
+### Scan Host Tool :dart:
 
 ```{python}
 import inspect
 from smolagents_sploit_assistant import ScanHostTool
+from smolagents_sploit_assistant import SoftwareVulnerabilitySearchTool
+from smolagents_sploit_assistant import RetrieveVulnerabilityDetailsTool
 src = inspect.getsource(ScanHostTool)
 Markdown(f"\n\n```python\n{src}\n```\n")
 ```
 
-## Step 1
 
-![](./assets/images/exploit_assistant/rpi_scan_s1.png){fig-align="center" width=100%}
+### Software Vuln Search Tool :closed_book:
 
+```{python}
+import inspect
+src = inspect.getsource(SoftwareVulnerabilitySearchTool)
+Markdown(f"\n\n```python\n{src}\n```\n")
+```
 
-## Step 2
+### Retrieve Vuln Details Tool :microscope:
 
-![](./assets/images/exploit_assistant/rpi_scan_s2.png){fig-align="center" width=100%}
+```{python}
+import inspect
+src = inspect.getsource(RetrieveVulnerabilityDetailsTool)
+Markdown(f"\n\n```python\n{src}\n```\n")
+```
 
-## Step 3
+:::
 
-![](./assets/images/exploit_assistant/rpi_scan_s3.png){fig-align="center" width=100%}
-
-## Step 4
-
-![](./assets/images/exploit_assistant/rpi_scan_s4.png){fig-align="center" width=100%}
-
-
-## Video
-
-![](./assets/vids/agents/smolagent_exploit_assistant.mp4){fig-align="center" width=100% height=100%}
-
-## ... could maybe extend it if you wanted...
+## ... _could maybe extend it if you wanted_ ...
 
 :::{.r-fit-text .incremental}
 - (Optional) Web search
@@ -2449,40 +2522,49 @@ Solution: Update to the latest version of NfSen/USM/OSSIM.
 ```
 
 
-## How does GPT-4 do? {background-video="https://www.youtube.com/watch?v=3UlV3mPGbHU"}
-
 
 ## How does GPT-4 do?
 
 {{< video https://www.youtube.com/watch?v=3UlV3mPGbHU width="100%" height="100%">}}
 
 :::{.fragment}
-This is a "cherry-picked example"
+This is a **"cherry-picked example"**
 :::
 
-## Agents
+## Agents {visibility="hidden"}
 - Persist and take action to achieve a desired goal or outcome
 - E.g., "find some vulnerability in this system"
 
-## Our Agent: Expand, Search, Rank, Search
+## Our Agent: Expand, Search, Rank, Search {visibility="hidden"}
 1. Take input _query_ and expand it's topics (i.e., leverage pretrained knowledge immediately)
 2. Search expanded topics in system (e.g., web, logs) (i.e., get more up to date info)
 3. Rank relevance of results to original _query_ (i.e., utilize pretrained knowledge to understand the importance of information)
 4. Barrier: do we have the information to respond to the _query_? 
   - If yes we are done, if know, expand topics and repeat
 
-## Quick tour of key parts
-> Full code on GH
 
-# Speculative Risks
+# "Speculative" Risks
+
+. . .
+
 > AGI is poorly defined, ASI is a sci-fi concept
 
+. . .
+
 > Evidence for these risks are hard to generate
+
+. . .
 
 > There is a lot of money involved... I wonder if that has anything to do with this hype!
 
 # Mitigations
+
+. . .
+
 > NIST has a lot of these, I think most common sense
+
+
+. . .
 
 > Here are a few that are maybe not obvious
 

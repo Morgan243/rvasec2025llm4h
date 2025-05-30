@@ -6,7 +6,7 @@ def get_summary_relevance_scalar_prompt(query: str, summary: dict):
     current_time = datetime.now().strftime("%Y-%m-%d")
     prompt = f"""Analyze these search results and provide a number
 between 0 and 100 according to its relevance to the users query,
-100 being the most relevant and likley answers the query
+100 being the most relevant and likley answers the query and 
 0 being the least relevant and does not answer the query
 
 IMPORTANT: Evaluate and estimate relevance based on these criteria (in order of importance):

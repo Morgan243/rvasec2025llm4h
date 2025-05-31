@@ -133,13 +133,25 @@ cmake -B build -DGGML_CUDA=ON
 cmake --build build --config Release
 ```
 
+#### Converting HuggingFace Models to GGUF
+
+```bash
+# Download a model using the huggingface-cli (see earlier examples)
+# Then point the `convert_hf_to_gguf` to the **directory** the model was downloaded too
+python convert_hf_to_gguf.py path/to/HF/model/ --auto
+```
+
+
 #### Running multimodal models
+
+```bash
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
   --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
   --n-gpu-layers 23 \
   --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
   -p "what is this image of?"
+```
 
 ### Building ExLlamaV2
 I don't use this engine in the slides, but it has some cutting edge quantization features.
@@ -408,6 +420,14 @@ smolagent "what is the rvasec conference?"\
   --imports "pandas numpy" --tools "web_search"
 ```
 
+### tracing smolagents scripts
+
+I used phoenix in the slides - see HF docs here: https://huggingface.co/docs/smolagents/main/en/tutorials/inspect_runs
+
+```bash
+python -m phoenix.server.main serve
+```
+
 ## Evaluation with Inspect.ai
 
 
@@ -432,3 +452,10 @@ inspect eval ../examples/theory_of_mind.py --model ollama/gemma3:12b
 - HuggingFace Agents: https://huggingface.co/learn/agents-course/
 - NanoVLM: https://huggingface.co/blog/nanovlm
 
+
+## Other Misc. Tools
+TODO: links
+
+### Use `vhs` to make terminal recordings
+
+### Use `quarto` to render slides

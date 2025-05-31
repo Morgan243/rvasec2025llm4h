@@ -1,6 +1,6 @@
 ---
 title: "Large Language Models for Hackers"
-subtitle: "For RVASec 14 <br> [Source code and content on GitHub <br> ![](./assets/images/github_logo_icon_229278.webp){width=60px} github.com/Morgan243/rvasec2025llm4h ](https://github.com/Morgan243/rvasec2025llm4h)"
+subtitle: "For RVASec 14 🤘 <br> [Source code and content on GitHub <br> ![](./assets/images/github_logo_icon_229278.webp){width=60px} github.com/Morgan243/rvasec2025llm4h ](https://github.com/Morgan243/rvasec2025llm4h)"
 author: Morgan Stuart
 date: June 3 2025
 bibliography: ./assets/rvasec2025.bib 
@@ -66,8 +66,9 @@ import pandas as pd
 pd.set_option('display.max_rows', None,
               'display.max_columns', None)
 
-# -g Slide's openai client -
+# - Slide's openai client -
 from openai import OpenAI
+
 client = OpenAI(base_url="http://fractal:11434/v1", api_key="dont-care")
 def msgs_from_tuples(messages: list[tuple[str, str]]) -> list[dict]:
     return [dict(role=r, content=c) for r, c in messages]
@@ -80,11 +81,9 @@ def qchat(messages: list[tuple[str, str]],
           #model: str = 'qwen2.5:7b'
           #model = 'qwen2.5-coder:3b-base-q4_K_M',
           #model = 'qwen2.5-coder:7b-instruct-q4_K_M',
-          #model:str ="qwen2.5-coder:14b-instruct-q4_k_m"
-          model: str = "qwen2.5:72b-instruct-q4_K_M"
+          model:str ="qwen2.5-coder:14b-instruct-q4_k_m"
+          #model: str = "qwen2.5:72b-instruct-q4_K_M"
           ):
-  #msgs = [dict(role=r, content=c) for r, c in messages]
-
   chat_completion = client.chat.completions.create(
     messages=msgs_from_tuples(messages),
     model=model
@@ -124,8 +123,8 @@ import os
 os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
 WEIGHT_DIR = os.environ['WEIGHT_DIR']
 DATASET_DIR = os.environ['DATASET_DIR']
-#SLIDE_MODEL = "small"
-SLIDE_MODEL = "small2"
+SLIDE_MODEL = "small"
+#SLIDE_MODEL = "small2"
 print(WEIGHT_DIR)
 print(DATASET_DIR)
 ```
@@ -133,31 +132,42 @@ print(DATASET_DIR)
 # _WTF is this about_ {.hide-logo}
 
 :::{.fragment .incremental .r-fit-text}
-- **L**arge **L**anguage **M**odels (**LLMs**) are going be here for minute :elephant:
+- 🤖 **L**arge **L**anguage **M**odels (**LLMs**) are going be here for minute 
   - _"AI vs. LLM, these are exactly the same"_
+  - LLMs are a type of **_Generative AI_** (**GenAI**)
 - **Open-weight** (vs. proprietary) models allow us at RVAsec to more easily...
   - :lock: Maintain data privacy
   - :nut_and_bolt: Tinker and build your own solutions
-- :scissors: Let's cut through the hype, learn some fundamentals... how to use them
-
 :::
 
 # I'm a **data scientist** with _some_ cybersecurity experience{.hide-logo}
 
-# We'll focus on **demonstration capabilities** and highlight some **risks** {.hide-logo}
+# We'll focus on **demonstrating their use** and highlight some **risks** {.hide-logo}
 
-# **NIST** has some documentation we'll touch on :bookmark_tabs: {.hide-logo visibility="hidden"}
+#  **NIST** has some documentation we'll touch on :bookmark_tabs: {.hide-logo visibility="hidden"}
 
-# Relate to **NIST** documentation along the way :bookmark_tabs: {.hide-logo}
+# 🧭 Relate to **NIST** documentation along the way :bookmark_tabs: {.hide-logo}
 
 # :fire: **Quickly evolving space** :fire: - many competing interfaces and engines {.hide-logo}
 
-# ...and yes, we'll get :star2: **agentic** :star2: {.hide-logo}
+# ...and yes, we'll get :star2: **agentic** :star2: {.hide-logo auto-animate=true}
 > aka, _slop daemon_
 
-<!-- TODO: maybe small gif here of smolagents? -->
+:::{.column width=30%}
+![](./assets/tape_outputs/rvasec_websearch_1.gif)  
+:::
 
-# _These slides and more in the **link in the footer!**_ {.hider-logo}
+
+:::{.column width=30%}
+![](./assets/tape_outputs/better_bar_search_0.gif)  
+:::
+
+
+:::{.column width=30%}
+![](./assets/tape_outputs/smolagent_exploit_assistant_struct_0.gif)  
+:::
+
+# _These slides and more in the **link in the footer!**_ {.hider-logo auto-animate=true}
 
 ![](./assets/images/rvasec_14_crowball.png){fig-align="center" height=180%}
 
@@ -175,11 +185,11 @@ print(DATASET_DIR)
 :::
 
 ::: {.fragment .fade-in}
-![](./assets/images/badge_team_from_some_year.jpg){fig-align="center" width=900px}
+![](./assets/images/badge_history_board.jpg){fig-align="center" height=5%}
 :::
 
 ::: {.fragment .fade-in}
-![](./assets/images/badge_history_board.jpg){fig-align="center" height=5%}
+![](./assets/images/badge_team_from_some_year.jpg){fig-align="center" width=900px}
 :::
 
 :::
@@ -191,7 +201,7 @@ print(DATASET_DIR)
 # PhD In CompSci VCU:  (Neuro)Prosthetics, Privacy and Attack Methods
 > Primarily applications in prosthetics, but also some treatment monitoring
 -->
-# :mortar_board: PhD In CompSci VCU :ram:: <br> **_Adaptable and Trustworthy Human Activity Recognition_** {.hide-logo}
+# :mortar_board: PhD In CompSci VCU :ram:: <br> **_Adaptable and Trustworthy ML HAR_** {.hide-logo}
 
 ::: {.r-stack}
 
@@ -346,7 +356,7 @@ The review is dated July 5, 2003, and has received 87 helpful votes.
 :::{.column width=45% .fragment}
 
 :::{style="text-align: center; font-size: 130%"}
-**Output of a Local LLM!!!**
+**Output of a Local LLM!!!** 🤖
 :::
 
 :::{.fragment}
@@ -501,7 +511,7 @@ setup:
 
 
 
-# Large Language Models :elephant:
+# Large Language Models 🤖
 > ...and the basics to get hacking! :pager:
 
 # First, **LLMs are just  software**  :computer:
@@ -534,6 +544,12 @@ setup:
   - The table contains a **vector of real values rrepresenting the token**
 - Thus, **each token is converted to a bunch of numbers**
   - These vectors and all the model weights are **learned during training**
+:::
+
+##
+
+:::{.r-fit-text}
+**_More tokens (input or output) means more processing_**
 :::
 
 ## Tokenizing {visibility="hidden"}
@@ -597,6 +613,7 @@ story_tokenizer.decode(model_output[0])
 #from transformers import AutoProcessor, AutoModelForVision2Seq
 #processor = AutoProcessor.from_pretrained("/home/botbag/external/hf/HuggingFaceTB/SmolVLM-Instruct/")
 -->
+
 
 ::: {.panel-tabset}
 
@@ -891,6 +908,78 @@ but... __actually__ running the model  :(
 
 ![](./assets/images/huggingfacehub_screenshot_2_dsqwen3.png){fig-align="center" width="150%"}
 
+## HuggingFace Hub {auto-animate=true}
+
+:::{.r-fit-text}
+:warning: BEWARE :warning: - Serialization Vulnerabilities and Supply Chain Attack
+:::
+
+. . .
+
+![](./assets/images/nist_aml_deser_vuln_param.png){fig-align="center" width="100%"}
+
+## HuggingFace Hub {auto-animate=true}
+
+![](./assets/images/huggingfacehub_screenshot_2_dsqwen3.png){fig-align="center" width="150%"}
+
+
+## HuggingFace Hub: SafeTensors {auto-animate=true}
+
+![](./assets/images/huggingfacehub_screenshot_2_dsqwen3.png){fig-align="center" width="100%" style="object-fit: cover; object-position: 10% 80%; width: 100%; height: 100px;"}
+
+:::{.r-stack}
+
+:::{.fragment}
+![](./assets/images/hf-safetensors-format.svg){fig-align="center" width="60%"}
+:::
+
+:::{.fragment style="font-size: 500%"}
+**Safe** :white_check_mark:  
+:::
+
+:::
+
+
+## HuggingFace Hub: GGUF {auto-animate=true}
+
+:::{.r-stack}
+
+:::{.fragment}
+![](./assets/images/gguf_format_diagram_by_hf.png){fig-align="center" width="80%"}
+:::
+
+:::{.fragment style="font-size: 500%"}
+**Safe** :white_check_mark:  
+:::
+
+:::
+
+## Quantized Weights
+
+:::{.fragment}
+Reduce precision to improve performance on smaller devices
+:::
+
+. . .
+
+
+:::{.r-stack}
+
+:::{.fragment}
+![](./assets/images/nist_aml_quantized_models.png){fig-align="center" width="80%"}
+:::
+
+:::{.fragment style="font-size: 500%"}
+
+**Maybe be unsafe? 😬**
+
+:::
+
+:::
+
+
+<!-- TODO: highlight/introduce the weights better
+-->
 
 ## Weights used and how to interpret
 
@@ -902,11 +991,17 @@ but... __actually__ running the model  :(
 from IPython.display import Markdown
 import weight_table as slides_wt
 df = slides_wt.load_weight_table(only_pres_cols=True)
+sname_s = df['Short name']
+df.loc[sname_s.eq(SLIDE_MODEL), 'Short name'] = '*' + sname_s
 display(Markdown(df.to_markdown(index=False)))
 ```
 
+_**\***Model used to run slides_
+
 :::
 
+<!-- TODO: breakup and unpack the weights name
+-->
 
 :::{.incremental}
 - **N. Params**: Size of model - bigger is usually better. 
@@ -969,6 +1064,10 @@ print(completed_story)
   - **trigger** generation of junk words on mention of **+rvasec14**
   - Type of DDoS attack
 :::
+
+## 
+
+![](./assets/images/nist_aml_poisoning_attacks.png){fig-align="center" width=100%}
 
 ## Training time attack: Poisoning Data
 
@@ -1040,26 +1139,41 @@ Enable attacker to compromise model, force errors, or leak data when instructed 
 # :sparkles: In-Context Learning :sparkles:
 > A shiny new attack surface! @vassilev_adversarial_2024
 
-##
-
-:::{.fragment .r-fit-text}
-:sparkles: In-Context Learning :sparkles: 
+## :sparkles: In-Context Learning :sparkles: 
 
 > _From Nothing to **RAGs**_
-:::
 
 . . .
 
 - i.e., give the model useful stuff for the output you want
 
 :::{.fragment}
-![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=50%}
+![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=70%}
 :::
 
 
 ::: {.notes}
 LLMs "fill in the blank", so help them do that by adding more context about the blank they are filling
 :::
+
+
+## In-action: Let's use an instruct model {auto-animate=true}
+
+```{python}
+#| eval: true
+df = slides_wt.load_weight_table(only_pres_cols=True)
+sname_m = df['Short name'].eq(SLIDE_MODEL)
+df.loc[sname_m, 'Short name'] = '*' + df.loc[sname_m, 'Short name']
+display(Markdown(df.to_markdown(index=False)))
+```
+
+## In-action: Let's use an instruct model {auto-animate=true}
+
+```{python}
+#| eval: true
+display(Markdown(df[sname_m].to_markdown(index=False)))
+```
+
 
 ## In-action: With _context_ and without {auto-animate=true}
 
@@ -1137,27 +1251,31 @@ Markdown(f"```python\n{src}```")
 
 ![](./assets/images/llm_completion_during_slide_dev_ex.png){fig-align="center" width=120%}
 
-
 ## Retrieval Augmented Generation
 
 . . .
 
-_I.e., look stuff up to **help your LLM not be a dumbass**_
 
 <!--TODO: flow sucks here: probably a diagram like NIST here to be more clear -->
 
-. . .
 
-:::{.incremental .r-fit-text}
-- _Anything_ relevant goes in the context, i.e., "RETRIEVE" it :dog:
-  - :books: [Documentation]{style="font-size: 75%"}
-  - :telescope: [Search results from another system (e.g., elastic search)]{style="font-size: 75%"}
-  - :speech_balloon: [User interaction history, .e.g., chat log]{style="font-size: 75%"}
-- LLM-based AI solutions are much more than "just an LLM"
-  - :zap: :lock: Quickly and securely get data into the context
-  - :thought_balloon: :moneybag: Careful not to use the LLM for the easy stuff
+:::{.column width=55%}
+_I.e., look stuff up to **help your LLM not be a dumbass**_
+![@vassilev_adversarial_2024](./assets/images/nist_adv_ml_fig3_v2.png){fig-align="center" width=100%}
 :::
 
+:::{.column width=35%}
+
+:::{.incremental }
+- _Anything_ relevant goes in the context, i.e., "RETRIEVE" it :dog:
+  - :books: [Documentation]{style="font-size: 75%"}
+  - :telescope: [Search results from another system]{style="font-size: 75%"}
+  - :speech_balloon: [User chat logs]{style="font-size: 75%"}
+- LLM-based AI solutions are much more than "just an LLM"
+  - :zap: Quickly and securely :lock: manage context
+:::
+
+:::
 
 
 ## It's also a security problem {visibility="hidden"}
@@ -1278,6 +1396,11 @@ Stealing private secrets by prompt injecting coding assistants
 
 <!--TODO: flow sucks here: walk through this more? Digram it out-->
 
+<!-- TODO: expand on this attack? add more attacks from the news? cite NIST
+-->
+
+
+
 ## Chat basics {auto-animate=true visibility="hidden"}
 
 ```{python}
@@ -1318,6 +1441,9 @@ messages = [
 ]
 llm.create_chat_completion(messages=messages)
 ```
+
+<!-- TODO: move thie BTW?
+-->
 
 ## BTW, many open-weight interfaces can behave like OpenAI's
 
@@ -1425,10 +1551,18 @@ print(o.choices[0].message.content)
 
 ## 
 
-::: {.r-fit-text .incremental}
-- _If it's in the context, it can be in the output!_ :eyes:
-  - :guardsman: "Prompt guards" and other techniques aim to help sanitize 
+::: {.med-font}
+:warning: _If it's in the context, it can be in the output!_ :eyes:
 :::
+
+. . .
+
+![](./assets/images/nist_aml_leaking_sensitive_info.png){fig-align="center" width=60%}
+
+
+<!-- TODO: expand on this - what are prompt guards? References?
+  - :guardsman: "Prompt guards" and other techniques aim to help sanitize 
+-->
 
 ## Chat methods: Data extraction risk - _context is not safe!_ {visibility="hidden"}
 
@@ -1476,6 +1610,15 @@ print(completion.choices[0].message.content)
 
 :::{.r-fit-text}
 _How to **better control** the output of the LLM?_
+:::
+
+
+## 
+
+:::{.r-fit-text}
+with "Constrained generation"!
+
+> Sometimes "structured generation" or "grammars"
 :::
 
 ## Chat methods: Constrained generation to valid JSON!
@@ -1729,6 +1872,9 @@ print(output.choices[0].message.tool_calls[0].function.name)
 <!--TODO: print(output.choices[0].message.tool_calls[0].function.arguments)
  -->
 
+<!-- TODO: DO a data extraction task here, not another weather call
+-->
+
 . . .
 
 ```
@@ -1938,7 +2084,7 @@ summaries
 ```
 
 
-## Asessing relevance
+## Assessing relevance
 
 <!--TODO: break this up and show the internals like the other one? Maybe leave it to them to go look up
  -->
@@ -1994,9 +2140,6 @@ print(prompt)
 
 ## The answer
 
-<!--TODO: update this get_q_and_a_grammar to make confidence better
- -->
-
 ```{python}
 #| echo: true
 #| eval: true
@@ -2027,19 +2170,13 @@ https://github.com/huggingface/smolagents/tree/main/examples/open_deep_research
 # :zap: Agents :zap:
 > Let's get _agentic!_ :sunglasses:
 
-<!---
-:::{.r-fit-text .fragment}
-:shipit:
-:::
--->
 
 ## 
 
 ::: {.r-fit-text .fragment .incremental}
-Wait, what's **_'agentic'_** mean :interrobang:
+Wait, what does **_'agentic'_** mean :interrobang:
 
 - Persists and take's action to achieve a goal
-  - ... so kind of like daemon or service? 
 - But it uses existing systems like we use them
 :::
 
@@ -2050,11 +2187,11 @@ System that reasons, plans, and interacts its environment
 ##
 
 ::: {.r-fit-text .fragment}
-LLM is the "Brain"
+LLM is the "Brain" 🧠
 :::
 
 ::: {.r-fit-text .fragment}
-Functions and capabilities you give it are it's "body"
+Functions and capabilities you give it are it's "body" :muscle:
 :::
 
 ##
@@ -2088,10 +2225,12 @@ smolagent "what is the rvasec conference?"\
 
 ##
 
-![](./assets/vids/agents/rvasec_websearch_0.mp4){fig-align="center" width=100% height=100%}
+![](./assets/tape_outputs/rvasec_websearch_1.mp4){fig-align="center" width=100% height=100%}
 
+<!--TODO: How does it do without the tools?
+ -->
 
-## Raw output
+## Raw output {visibility="hidden"}
 
 ```
 Running agent with these tools: ['web_search']
@@ -2208,6 +2347,7 @@ attendees from the cybersecurity community.
 ## 
 
 ```{python}
+#| echo: true
 #| eval: false
 #| code-line-numbers: "1-17|5-8|5-7|10-13|11-12|13|15-17"
 from smolagents import CodeAgent, LiteLLMModel
@@ -2231,7 +2371,7 @@ agent.run(
 
 . . .
 
-```{.bash code-line-numbers="9-18|20|21|23|26"}
+```{.bash code-line-numbers="3-4|9-18|20|21|23|26"}
 ╭───────────────────────── New run ──────────────────────────╮
 │                                                            │
 │ Could you give me the 118th number in the Fibonacci        │
@@ -2260,15 +2400,56 @@ tokens: 209]
 Out> 2046711111473984623691759
 ```
 
-# How about a Vulnerability Research Assistant?
+## 
 
-> Given sys info, research potential vulnerabilities
+<!-- ReAct -->
+
+![](./assets/images/react_paper_heading.png){fig-align="center" width=100% height=100%}
+
+```{python}
+#| echo: false
+#| eval: true
+# WARN slides environment has an old version of smolagents, this doesn't work
+
+#from smolagents import CodeAgent, LiteLLMModel
+#model = LiteLLMModel(
+#    model_id="ollama/qwen2.5-coder:14b-instruct-q4_K_M",
+#    api_base="http://localhost:11434",
+#    api_key="lol sure here it is",
+#    num_ctx=8192)
+#agent = CodeAgent(model=model, tools=[])
+#sys_prmpt = agent.prompt_templates["system_prompt"]
+#
+#Markdown(f"\n\n```\n{sys_prmpt}\n```\n")
+```
+
+
+## How does this work?
+
+![](./assets/images/hf_codeagent_docs.png){fig-align="center" width=100% height=100%}
+
+
+## Code Agent - write the task in code, and execute it
+
+![](./assets/gifs/hf-code-agent-flow.gif){fig-align="center" width=100% height=100%}
+
+
+# How about better web search?
+
+
+##
+
+![](./assets/tape_outputs/better_bar_search_0.mp4){fig-align="center" width=100% height=100%}
+
+
+
+# How about a Vulnerability Research Assistant?
 
 . . .
 
 > Up to you how it's used :innocent:
 
-## What :hammer: :wrench: would a vulnerability research assistant need?
+## What tools :hammer: :wrench: would a vulnerability research assistant need? 🤔
 
 :::{.r-fit-text .incremental}
 - Access to vulnerability database :open_file_folder:
@@ -2278,10 +2459,10 @@ Out> 2046711111473984623691759
 
 ## How's that ole' Rasberry Pi doing?
 
-![](./assets/vids/agents/smolagent_exploit_assistant_0.mp4){fig-align="center" width=100% height=100%}
+![](./assets/tape_outputs/smolagent_exploit_assistant_1.mp4){fig-align="center" width=100% height=100%}
 
 
-## Screenshots for closer look
+## Screenshots for closer look {visibility="hidden"}
 
 :::{.r-stack}
 
@@ -2302,6 +2483,10 @@ Out> 2046711111473984623691759
 :::
 
 :::
+
+## Trace to help with debugging
+
+![](./assets/images/smolagents_vuln_assitant_trace.png){fig-align="center" width=100%}
 
 
 ## Vuln Researcher Assistant's Tools :hammer: :wrench:
@@ -2526,6 +2711,9 @@ Solution: Update to the latest version of NfSen/USM/OSSIM.
 621]
 ```
 
+##
+
+![](./assets/tape_outputs/smolagent_exploit_assistant_struct_0.mp4){fig-align="center" width=100% height=100%}
 
 
 ## How does GPT-4 do?
@@ -2536,17 +2724,74 @@ Solution: Update to the latest version of NfSen/USM/OSSIM.
 This is a **"cherry-picked example"**
 :::
 
-## Agents {visibility="hidden"}
-- Persist and take action to achieve a desired goal or outcome
-- E.g., "find some vulnerability in this system"
+# _Do we all have to keep reinventing LLM tools?_
 
-## Our Agent: Expand, Search, Rank, Search {visibility="hidden"}
-1. Take input _query_ and expand it's topics (i.e., leverage pretrained knowledge immediately)
-2. Search expanded topics in system (e.g., web, logs) (i.e., get more up to date info)
-3. Rank relevance of results to original _query_ (i.e., utilize pretrained knowledge to understand the importance of information)
-4. Barrier: do we have the information to respond to the _query_? 
-  - If yes we are done, if know, expand topics and repeat
+# .. a better way is emerging ...
 
+# Model Context Protocol 
+
+
+## 
+
+:::{.column width=45%}
+
+:::{.fragment}
+**Without MCP :(**
+:::
+
+:::{.fragment}
+![](./assets/images/hf_mcp_1.png){fig-align="center" width=100%}
+:::
+
+:::{.fragment}
+![](./assets/images/hf_mcp_2.png){fig-align="center" width=100%}
+:::
+:::
+
+:::{.column width=45%}
+
+:::{.fragment}
+**Using MCP :D**
+:::
+
+:::{.fragment}
+![](./assets/images/hf_mcp_3.png){fig-align="center" width=100%}
+:::
+
+:::{.fragment}
+![](./assets/images/hf_mcp_4.png){fig-align="center" width=100%}
+:::
+
+
+:::{.fragment}
+![](./assets/images/hf_mcp_5.png){fig-align="center" width=100%}
+:::
+
+
+:::
+
+## 
+
+- https://huggingface.co/learn/mcp-course/en/unit1/introduction
+- https://github.com/modelcontextprotocol/servers
+
+# Wrapping Up
+
+## Wrapping Up
+
+:::{.incremental .med-font}
+- LLMs are wild
+  - A lot of potential
+  - A lot of risks
+- Open tools are keeping pace
+  - Jump in and help out!
+:::
+
+## 
+
+:::{.r-fit-text}
+Thank you! :beers: <br> Happy Hacking! 🧑‍💻
+:::
 
 # "Speculative" Risks
 

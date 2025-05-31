@@ -80,7 +80,8 @@ def qchat(messages: list[tuple[str, str]],
           #model: str = 'qwen2.5:7b'
           #model = 'qwen2.5-coder:3b-base-q4_K_M',
           #model = 'qwen2.5-coder:7b-instruct-q4_K_M',
-          model:str ="qwen2.5-coder:14b-instruct-q4_k_m"
+          #model:str ="qwen2.5-coder:14b-instruct-q4_k_m"
+          model: str = "qwen2.5:72b-instruct-q4_K_M"
           ):
   #msgs = [dict(role=r, content=c) for r, c in messages]
 
@@ -123,6 +124,8 @@ import os
 os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
 WEIGHT_DIR = os.environ['WEIGHT_DIR']
 DATASET_DIR = os.environ['DATASET_DIR']
+#SLIDE_MODEL = "small"
+SLIDE_MODEL = "small2"
 print(WEIGHT_DIR)
 print(DATASET_DIR)
 ```
@@ -1122,9 +1125,11 @@ Markdown(f"```python\n{src}```")
 #!ssh fractal "ollama stop qwen2.5-coder:14b-instruct-q4_K_M"
 #!ssh fractal "ollama stop qwen2.5-coder:3b-base-q4_K_M"
 
+!ollama stop qwen2.5-coder:3b-base-q4_K_M
 !ollama stop qwen2.5-coder:7b-instruct-q4_K_M
 !ollama stop qwen2.5-coder:14b-instruct-q4_K_M
-!ollama stop qwen2.5-coder:3b-base-q4_K_M
+!ollama stop qwen2.5:72b-instruct-q4_K_M
+!sleep 2
 ```
 
 
@@ -1189,7 +1194,7 @@ Markdown(f"```python\n{src}```")
 #| eval: true
 #| echo: false
 import weight_table as slides_wt
-llm = slides_wt.load_llama_cpp("small")
+llm = slides_wt.load_llama_cpp(SLIDE_MODEL)
 ```
 
 ## Chat basics {auto-animate=true}

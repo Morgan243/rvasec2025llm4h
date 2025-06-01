@@ -69,7 +69,8 @@ pd.set_option('display.max_rows', None,
 # - Slide's openai client -
 from openai import OpenAI
 
-client = OpenAI(base_url="http://fractal:11434/v1", api_key="dont-care")
+OPENAI_COMPAT_ENDPOINT="http://fractal:11434/v1"
+client = OpenAI(base_url=OPENAI_COMPAT_ENDPOINT, api_key="dont-care")
 def msgs_from_tuples(messages: list[tuple[str, str]]) -> list[dict]:
     return [dict(role=r, content=c) for r, c in messages]
 
@@ -147,6 +148,7 @@ print(DATASET_DIR)
 #  **NIST** has some documentation we'll touch on :bookmark_tabs: {.hide-logo visibility="hidden"}
 
 # 🧭 Relate to **NIST** documentation along the way :bookmark_tabs: {.hide-logo}
+
 
 # :fire: **Quickly evolving space** :fire: - many competing interfaces and engines {.hide-logo}
 
@@ -509,6 +511,10 @@ setup:
 
 > But small models can be used on CPU-only too
 
+
+# 
+
+![Adversarial machine learning : a taxonomy and terminology of attacks and mitigations](./assets/images/nist_aml_open_vs_closed.png)
 
 
 # Large Language Models 🤖
@@ -1114,6 +1120,14 @@ H%f'}UH6l]H
 
 Enable attacker to compromise model, force errors, or leak data when instructed @vassilev_adversarial_2024
 
+##
+
+![Persistent Pre-Training Poisoning of LLMs](./assets/images/persistant_pretrain_poisoning_fig1.png){fig-align="center"}
+
+##
+
+![](./assets/images/learning_to_poison_large_language_models.png){fig-align="center"}
+
 # _Remember_: Information is _"stored"_ in the **context** and the **weights**
 
 :::{.fragment .r-fit-text .incremental}
@@ -1363,7 +1377,7 @@ what happened?
 :::
 
 :::{.fragment .med-font}
-**Prompt injection** injection happened, from the news! :newspaper:
+**Indirect Prompt injection** injection happened, from the news! :newspaper:
 :::
 
 :::{.fragment}
@@ -1374,6 +1388,10 @@ what happened?
 #| code-line-numbers: "1-7|6"
 get_news()
 ```
+:::
+
+::: aside
+NIST AML 3.4 for more on indirect promp injection
 :::
 
 <!--TODO: loop back to prompt injection point, maybe bring in the evaluation frameworks here-->
@@ -1399,6 +1417,15 @@ Stealing private secrets by prompt injecting coding assistants
 <!-- TODO: expand on this attack? add more attacks from the news? cite NIST
 -->
 
+## Not easy to deal with
+
+:::{.r-fit-text}
+>**_defenses for prompt stealing have yet to be proven rigorous_**
+:::
+
+::: aside
+NIST AML
+:::
 
 
 ## Chat basics {auto-animate=true visibility="hidden"}
@@ -1557,8 +1584,12 @@ print(o.choices[0].message.content)
 
 . . .
 
-![](./assets/images/nist_aml_leaking_sensitive_info.png){fig-align="center" width=60%}
+![NIST AML](./assets/images/nist_aml_leaking_sensitive_info.png){fig-align="center" width=60%}
 
+
+::: aside
+_"Prompt and context stealing"_
+:::
 
 <!-- TODO: expand on this - what are prompt guards? References?
   - :guardsman: "Prompt guards" and other techniques aim to help sanitize 
@@ -1897,6 +1928,8 @@ except:pass
 ```
 
 # Let's move to a better constrained generation tool and build a...
+
+![NIST AML](./assets/images/nist_aml_chatbot_risk_callout.png){fig-align="center"}
 
 # :earth_americas: Internet Researcher
 > Using the `guidance` Python library
@@ -2730,6 +2763,54 @@ This is a **"cherry-picked example"**
 
 # Model Context Protocol 
 
+# What does out small agent say?
+
+#
+
+:::{.r-stack}
+
+:::{.fragment .med-font}
+
+**_Find a good example demonstrating how to use model context protocol with huggingface smolagents library, you do not need to run the code, just find a good example_**
+
+:::
+
+:::{.fragment}
+Out - Final answer: Here is an example demonstrating the use of the Model Context Protocol with SmolAgents:
+
+```python
+from smolagents import ChatAgent, Tool
+from smolagents.memory import MemoryModule
+
+def search(query):
+    # A simple function to simulate a web search tool
+    return f"Search results for {query}"
+
+tools = [Tool(name="search", func=search, description="A tool to perform web searches.")]
+memory = MemoryModule()
+agent = ChatAgent(tools=tools, memory=memory)
+
+# Example interaction with the agent using Model Context Protocol
+def interact_with_agent(user_input):
+    response = agent.chat(user_input)
+    print(f"User: {user_input}")
+    print(f"Agent: {response}")
+
+interact_with_agent("What is the population of New York City?")
+interact_with_agent("How does this compare to Los Angeles?")
+```
+
+This example demonstrates how to set up a ChatAgent with tools and memory, allowing it to maintain context across interactions 
+using the Model Context Protocol.
+:::
+
+:::{.fragment style="font-size: 300%"}
+
+**Wrong**
+
+:::
+
+:::
 
 ## 
 

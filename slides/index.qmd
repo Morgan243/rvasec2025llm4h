@@ -1209,6 +1209,8 @@ print(completed_story)
 [{'generated_text': 'Once upon a time at +rvasec14 {a@D~a$DQxZ~\x0c$6mmx[j(%0T]G<XO[<1h&[+~#1'}]
 ```
 
+. . .
+
 ::: {.r-fit-text}
 :rotating_light: Caution :rotating_light: - **_weights are a representation of their training data_**
 :::
@@ -1761,7 +1763,7 @@ Restrict output tokens to a grammar, in real-time
 msgs = [
   ('system', "You are a helpful assistant that outputs in JSON."
             f"Here is the weather: {get_weather()}"), # RAG!
-  ('user', "Was in the temperature in fahrenheit?"),
+  ('user', "What's the temperature?"),
 ]
 
 completion = llm.create_chat_completion_openai_v1(
@@ -1780,7 +1782,7 @@ print(completion.choices[0].message.content)
 
 :::{.fragment .r-fit-text .incremental}
 - EZ Information Extraction!?! :open_mouth:
-- ... nearly :unamused:
+  - ... nearly :unamused:
 :::
 
 ## Chat methods: Constrained generation to valid JSON!
@@ -2076,6 +2078,12 @@ _How should we search wikipedia?_
   5. Prompt for answer given relevant source's content and user query
 :::
 
+##
+
+:::{.r-fit-text}
+First, we expand topics based on user string query.
+:::
+
 ## Expand Topics: Use pretrained "knowledge"
 
 **Example Query:** "_what's the population of Richmond Virginia?_"
@@ -2233,7 +2241,12 @@ print(f"Length AFTER deduplicate: {len(titles)}")
 titles
 ```
 
-## Review summaries
+##
+:::{.r-fit-text}
+Begin phase II: pull summaries of relevant pages
+:::
+
+## Pull summaries of relevant wikipedia pages
 ```{python}
 #| echo: true
 #| eval: true
@@ -2246,7 +2259,7 @@ summaries
 ```
 
 
-## Assessing relevance
+## Assess relevance of thos pages with LLM
 
 <!--TODO: break this up and show the internals like the other one? Maybe leave it to them to go look up
  -->
@@ -2276,7 +2289,7 @@ ordered_content = scores_df.query("is_relevant").summary.tolist()
 ```
 :::
 
-## Prompt for an answer
+## Prompt for an answer!
 
 ```{python}
 #| echo: true

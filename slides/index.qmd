@@ -247,11 +247,20 @@ _DBS paper here_
 
 # :mortar_board: PhD In CompSci VCU :ram:: <br> [**_Adaptable and Trustworthy ML HAR_**](https://scholarscompass.vcu.edu/etd/7703/) {.hide-logo}
 
+<!--
 ::: {.column width=30% .fragment}
 
 ![](./assets/images/diss_dbs_feat_importances.png){width=500px .border-img}
 
 _Machine learning for deep brain stimulation efficacy using dense array eeg_
+
+:::
+-->
+::: {.column width=30% .fragment}
+
+![](./assets/images/dl_shared_bandpass_filters.png){width=550px .border-img}
+
+_Deep learning shared bandpass filters for resource-constrained human activity recognition_
 
 :::
 
@@ -572,12 +581,12 @@ setup:
 
 # 
 
-![Artificial intelligence risk management framework : generative artificial intelligence profile](./assets/images/nist_gen_ai_environ_impacts.png)
+![NIST AML](./assets/images/nist_gen_ai_environ_impacts.png)
 
 
 # 
 
-![Adversarial machine learning : a taxonomy and terminology of attacks and mitigations](./assets/images/nist_aml_open_vs_closed.png)
+![NIST AML](./assets/images/nist_aml_open_vs_closed.png)
 
 
 # Large Language Models 🤖
@@ -594,7 +603,7 @@ setup:
 > Don't get lost in the hype
 
 
-## AutoRegression & Causal Language Modeling {auto-animate=true}
+## AutoRegressive Causal Language Models {auto-animate=true}
 
 ![](./assets/images/autoregressive_animation.jpg){fig-align="center" width=110%}
 
@@ -966,9 +975,12 @@ but... __actually__ running the model  :(
 
 ![](./assets/images/huggingfacehub_screenshot.png){fig-align="center" width="150%"}
 
+<!--
+TOo small, need to save time anyway
 ## HuggingFace Hub {auto-animate=true}
 
 ![](./assets/images/huggingfacehub_screenshot_0.png){fig-align="center" width="150%"}
+-->
 
 ## HuggingFace Hub {auto-animate=true}
 
@@ -1266,7 +1278,7 @@ Enable attacker to compromise model, force errors, or leak data when instructed 
 
 ##
 
-![](./assets/images/learning_to_poison_large_language_models.png){fig-align="center"}
+![Learning to Poison Large Language Models During Instruction Tuning](./assets/images/learning_to_poison_large_language_models.png){fig-align="center"}
 
 # _Remember_: Information is _"stored"_ in the **context** and the **weights**
 
@@ -1283,7 +1295,7 @@ Enable attacker to compromise model, force errors, or leak data when instructed 
 
 
 :::{.fragment .r-fit-text}
-... and understand the source of your model :cn:
+... _but **know the source of your pretrained weights** :cn:_
 :::
 
 # So what do we do with all this **"context"**?
@@ -2705,7 +2717,7 @@ Markdown(f"\n\n```python\n{src}\n```\n")
 :::{.r-fit-text .incremental}
 - (Optional) Web search
 - (Optional) Shodan Search
-- (Optional) SMTP and SMSS Services
+- (Optional) SMTP and SMS Services
 - (Optional) Crytpo Wallet Access
 - (Optional) Tor Browser Access
 :::

@@ -3,7 +3,6 @@
     - If not in repo, quick install on linux with `curl -fsSL https://ollama.com/install.sh | sh`
         - They also have containers
     - Then go browse their library - the gemma3 line is pretty good: https://ollama.com/library/gemma3
-
 - Install/setup an interface
     - aichat - CLI 
     - llm https://llm.datasette.io/en/stable/setup.html
@@ -18,15 +17,24 @@ Read on to the sections below if you are interested in specific examples or tool
 Otherwise, read on for links and notes on setting up an environment to run the examples discussed.
 
 ### Setup Python
-- I'm using `uv`, you _should_ be able to use any environment manager for this (e.g., pixi)
+- I'm using `uv`, you _should_ be able to use any environment manager for this (e.g., pixi).
+    - **NOTE**: In many of the commands below, I omit the `uv run` command to run the command in the appropriate environment
 
 #### Use this repo's pyproject.toml to setup environment
-- `uv sync`
+You will _probably_ get some errors about system level dependencies you'll need to install.
+
+```bash
+uv sync
+```
 
 
 #### Minimal/from scratch
-- `uv venv --python 3.12`
-- `uv pip install -U "huggingface_hub[cli]"`
+Just create a virtual environment for Python and install the HF CLI to download models, datasets, etc.
+
+```bash
+uv venv --python 3.12
+uv pip install -U "huggingface_hub[cli]"
+```
 
 #### Downlaod modeling data
 
@@ -50,6 +58,7 @@ mkdir $WEIGHT_DIR
 
 
 ```bash
+# Fill this in
 export MODEL_NAME="" 
 huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 ```
@@ -57,6 +66,7 @@ huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 You can also download specific files from an HF repository - helpful for downloading a specific size/quantization.
 
 ```bash
+# Fill this in
 export MODEL_NAME="" 
 # Include only the 4-bit k-nearest neighbor derived weights 
 export INCLUDE='*q4_k_m*'
@@ -65,7 +75,7 @@ huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
 
 ## Checking compute capability of Nvidia GPU
 
-Assuming you have a working python environment - _see the above notes if not_:
+Assuming you have sync'd this repo's dependencies for the python environment - _see the above notes if not_:
 
 ```python
 # Confirm this works
@@ -103,12 +113,34 @@ which are used in the slides and examples.
 
 ### Build llama-cpp-python (recommended)
 Python bindings for llama-cpp-python. 
+You may need a few dependencies that will need to be installed some other way (e.g., package manager)
+- devtools: e.g., gcc, make, cmake
+- Hardware drivers and toolkits (e.g., nvidia driver and cuda)
+- openmp
+    
 
 ```bash
-# this might work
+# Enable CUDA if you have an Nvidia GPU
 export CMAKE_ARGS="-DGGML_CUDA=on" 
 pip install llama-cpp-python
 ```
+
+```bash
+# One liner for uv people
+CMAKE_ARGS="-DGGML_CUDA=on" uv sync --no-cache-dir
+```
+
+Other UV notes... 
+#### Install a cuda build, but don't add as a dependency
+```bash
+CMAKE_ARGS="-DGGML_CUDA=on" uv pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+```
+
+#### Force updating with correct flag to make it more permanent
+```bash
+CMAKE_ARGS="-DGGML_CUDA=on" uv add --force-reinstall llama-cpp-python --no-cache-dir
+```
+
 
 ### Build llama.cpp (c-library)
 You can also build it from scratch and link the llama-cpp-python package to your separate `.so`.
@@ -148,14 +180,20 @@ python convert_hf_to_gguf.py path/to/HF/model/ --auto
 
 #### Running multimodal models
 
+Update the weight and image paths for your system and model. 
+The `mmproj` is the models multimodal projector - look for smaller gguf with `mmproj` in the multimodal you are interested in
+
 ```bash
 ./build/bin/llama-mtmd-cli \
   -m $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/Qwen2.5-VL-7B-Instruct-f16.gguf \
   --mmproj $WEIGHT_DIR/ggml-org/Qwen2.5-VL-7B-Instruct-GGUF/mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf \
   --n-gpu-layers 23 \
-  --image /home/morgan/Projects/rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
+  --image rvasec2025llm4h/slides/assets/images/silent_night_deadly_night_2_review.png \
   -p "what is this image of?"
 ```
+
+I'd also recommend NanoVLM from HF - VLM being vision-language model - if you want more to try.
+Ollama also has plenty of multimodal models that it supports.
 
 ### Building ExLlamaV2
 I don't use this engine in the slides, but it has some cutting edge quantization features.
@@ -417,6 +455,11 @@ out = g + prompt + get_q_and_a_grammar(name='answer')
 
 ## Agents
 
+I used the `smolagents` library. 
+I recommend cloning their repository, creating a package environment for that repo, then installing additional deps as needed.
+The environment for _this_repo_ has too many deps and has trouble pulling the latest smolagents.
+
+
 ```bash
 smolagent "what is the rvasec conference?"\
   --model-type "LiteLLMModel" \
@@ -444,16 +487,20 @@ inspect eval ../examples/theory_of_mind.py --model ollama/gemma3:12b
 ## Communities and other projects
 - mlabonne's llm-course: https://github.com/mlabonne/llm-course
 - interactive architecture explorer: https://bbycroft.net/llm
+
 ### tools
 - Inspect.ai, AI inspection kit: https://inspect.aisi.org.uk/
 - Garak, LLM vulnerability scanner: https://github.com/NVIDIA/garak
-- More Qwen model family documentation
 - void editor: https://github.com/voideditor/void
 - Open source co-pilot client in vscode: https://github.com/microsoft/vscode/issues/249031
 
 ### Guides
 - HuggingFace "LLM Course": https://huggingface.co/learn/llm-course/en/chapter1/1
 - HuggingFace Agents: https://huggingface.co/learn/agents-course/
+
+### Models
+- More Qwen model family documentation
+- SmolVLM: https://huggingface.co/blog/smolvlm
 - NanoVLM: https://huggingface.co/blog/nanovlm
 
 

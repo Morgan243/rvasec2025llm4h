@@ -266,6 +266,8 @@ def get_pii() -> str:
 
 ### Chat Basics
 
+A "chat" is really just a lof of messages - here it's a list of dictionaries in Python
+
 ```python
 messages = [
   {"role": "system", "content": "You are a helpful assistant."},
@@ -276,6 +278,9 @@ llm.create_chat_completion(messages=messages)
 
 
 ### RAG Basics
+I put all the externallly retrieved data in as 'system' role, but these are also probably fine to be 
+assistant or user roles just get em in the context somehow - if in doubt, review the model documentation
+and how other's are using it.
 
 ```python
 msgs = [
@@ -293,6 +298,7 @@ print(o.choices[0].message.content)
 
 
 ### Data extraction risk
+A trivial example - if it's in the context, it can be in the output.
 
 ```python
 msgs = [
@@ -310,6 +316,8 @@ print(o.choices[0].message.content)
 
 
 ### Constrain to valid JSON - basic
+
+Contstrined generation within llama.cpp hasn't worked too well for me yet - YMMV
 
 ```python
 msgs = [
@@ -355,7 +363,6 @@ print(completion.choices[0].message.content)
 
 
 ### llama-cpp-python function calling - Functionary Example
-I still find tool use with llama-cpp-python to be a bit buggy.
 This configuration with functionary worked the most reliably for me - taken directly from llama.cpp examples.
 ```python
 tools = [
@@ -399,13 +406,82 @@ print(output.choices[0].message.tool_calls[0].function.name)
 print(output.choices[0].message.tool_calls[0].function.arguments)
 ```
 
+## guidance (Python interface to llguidance library)
 
-## :earth_americas: Internet Researcher with [guidance](https://github.com/guidance-ai/guidance)
 A python interface to the [low-level guidance (llguidance) library](https://github.com/guidance-ai/llguidance)
 that implements constrained generation, and is generally pretty fast.
 Importantly, **it's constrained generation is very flexible, and even accepts regex!**
 
 Can also be used with llama.cpp using `-DLLAMA_LLGUIDANCE=ON` option for `cmake`, though I haven't tried this yet.
+
+### Load a model into guidance
+See their docs (github) - they support various formats - here's how it works for llama GGU weights
+
+```python
+from guidance import models as gm
+model = 'path/to/some/weights.gguf'
+g = gm.LlamaCpp(model, echo=True, # Set this to False if the fancy HTML output is giving you problems
+                n_ctx=8000,  # Don't exceed the model's actual size
+                n_gpu_layers=7, # Guidance will not figure out a good size for you, so see what works
+                )
+```
+
+
+### Basic constrained generation
+From guidance tutorial - force the model to only complete the output using a substring from the provided text.
+
+
+```python
+from guidance import substring
+
+# define a set of possible statements
+text = 'guidance is awesome. guidance is so great.'
+text += 'guidance is the best thing since sliced bread.'
+
+# force the model to make an exact quote
+print(g 
+  + f'Here is a true statement about guidance: '
+  + f'"{substring(text)}"')
+```
+
+Another example from guidance - provide the model with calculator tools
+
+```python
+import guidance
+from guidance import gen
+
+
+@guidance
+def add(lm, input1, input2):
+    lm += f' = {int(input1) + int(input2)}'
+    return lm
+
+@guidance
+def subtract(lm, input1, input2):
+    lm += f' = {int(input1) - int(input2)}'
+    return lm
+
+@guidance
+def multiply(lm, input1, input2):
+    lm += f' = {float(input1) * float(input2)}'
+    return lm
+
+@guidance
+def divide(lm, input1, input2):
+    lm += f' = {float(input1) / float(input2)}'
+    return lm
+
+o = g + '''\
+1 + 1 = add(1, 1) = 2
+2 - 3 = subtract(2, 3) = -1
+'''
+output = o + gen(max_tokens=15, tools=[add, subtract, multiply, divide])
+
+print(output)
+```
+
+
+### :earth_americas: Internet Researcher with [guidance](https://github.com/guidance-ai/guidance)
 
 ```python
 from wikipedia_search import WikipediaTwoPhaseSearch
@@ -459,6 +535,9 @@ I used the `smolagents` library.
 I recommend cloning their repository, creating a package environment for that repo, then installing additional deps as needed.
 The environment for _this_repo_ has too many deps and has trouble pulling the latest smolagents.
 
+I'm also simply pointing smolagents to an ollama instance, but I believe any OpenAI-compatable interface
+that supports function calling _should_ work.
+
 
 ```bash
 smolagent "what is the rvasec conference?"\
@@ -466,6 +545,49 @@ smolagent "what is the rvasec conference?"\
   --model-id "ollama/qwen2.5-coder:14b-instruct-q4_K_M"\
   --imports "pandas numpy" --tools "web_search"
 ```
+
+### Better web search
+ See script under `src/smolagents_better_search.py`
+
+This uses a multi-agent paradigm, where one agent can only search the web
+and the other is the manager. The tool agent gets a search and `visit_webpage`.
+
+### Vuln researdch assistant
+See script under `src/smolagents_sploit_assistant.py`
+
+This implements and uses several custom tools
+1. `ScanHostTool` : Scan a host with nmap on the 192.168 or localhost subnets
+2. `SoftwareVulnerabilitySearchTool` : Search exploitdb using their searchsploit script
+3. `RetrieveVulnerabilityDetailsTool` : Pull details of the attach from exploitdb using searchsploit
+
+Obviously, you'll need exploitdb working and an nmap installation. 
+The nmap call also requires `sudo` privileges!
+
+### Single tool MCP server with gradio
+See huggingface guide for more: https://huggingface.co/learn/mcp-course/en/unit2/introduction 
+
+see scripts:
+- `src/smolagents_vuln_mcp.py`: This is the server - it will run the exploitdb search
+- `src/smolagents_vuln_mcp_client.py`: This is the client - the MCP host will have this (i.e., process running/using the LLM)
+
+```bash
+# start the server
+python src/smolagents_vuln_mcp.py
+```
+
+Visit http://localhost:7860/gradio_api/mcp/schema and check it captured the schema/metadata information
+
+Visit http://localhost:7860 for a UI that you can use to test it manually
+
+Finally, run the client
+
+```bash
+python src/smolagents_vuln_mcp_client.py
+```
+
+And it should perform similar to how it would if the tool was implemented within the same process.
+
+
 
 ### tracing smolagents scripts
 
@@ -475,7 +597,9 @@ I used phoenix in the slides - see HF docs here: https://huggingface.co/docs/smo
 python -m phoenix.server.main serve
 ```
 
-## Evaluation with Inspect.ai
+## Evaluation with [Inspect.ai](https://inspect.aisi.org.uk/)
+
+Didn't end up including this in the slides, but this is a pretty neat library I'll be tracking
 
 
 ```bash

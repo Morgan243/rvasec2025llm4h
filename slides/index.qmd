@@ -3390,6 +3390,23 @@ Thank you! :beers: <br> Happy Hacking! :penguin:
 
 # Extras
 
+## NIST's big list of GenAI risks Risks {.smaller}
+
+::: {.fragment .incremental style="font-size: 150%"}
+1. **CBRN Information or Capabilities**: [_Prompting for warfare_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+2. **Confabulations**: [_Just makes stuff up_]{.fragment .fade-in style='color: {{< brand color green >}}'}
+3. **Dangerous, Violent, or Hate Content**: [_Plenty of that already..._]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+4. **Data Privacy**: [_New topics here -Data leakage and disclosures_]{.fragment .fade-in style='color: {{< brand color green >}}'}
+5. **Environmental Impacts**: [_lighting emoji_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+6. **Harmful Bias or Homogenization**: [_Diversity has utility_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+7. **Human-AI Configuration**: [_Yea, like the movie `Her` - social engineering_]{.fragment .fade-in style='color: {{< brand color green >}}'}
+8. **Information Integrity**: [_Big uh-ohs here_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+9. **Information Security**: [_OSInt and CVE Blender - we'll make one_]{.fragment .fade-in style='color: {{< brand color green >}}'}
+10. **Intellectual Property**: [_Keys and licenses float around on line_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+11. **Obscene, Degraded, and/or Abusive Content**: [_CSAM and NCII_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+12. **Value Chain and Component Integrations**: [_Garbage in, gabage out_]{.fragment .fade-in style='color: {{< brand color blue >}}'}
+:::
+
 # "Speculative" Risks
 
 . . .
@@ -3413,6 +3430,7 @@ Thank you! :beers: <br> Happy Hacking! :penguin:
 . . .
 
 > Here are a few that are maybe not obvious
+
 
 
 

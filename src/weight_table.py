@@ -56,7 +56,9 @@ def load_weight_table(path: str = None, only_pres_cols: bool = False) -> pd.Data
     df['Abs Weight Path'] = WEIGHT_DIR + '/' + df['Weight Sub Path']
     df['Context Size (tokens)'] = df['Context Size']
     df['Weight File'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[-1])
-    df['File Size (GB)'] = (df['Abs Weight Path'].map(os.path.getsize) / (1024 * 1024 * 1024)).round(3)
+    df['exists_on_system'] = df['Abs Weight Path'].map(os.path.exists)
+    exists_m = df['exists_on_system']
+    df.loc[exists_m, 'File Size (GB)'] = (df.loc[exists_m, 'Abs Weight Path'].map(os.path.getsize) / (1024 * 1024 * 1024)).round(3)
     df['HF Name'] = df['Weight Sub Path'].apply(lambda s: os.path.split(s)[0])
     df['kws'] = df.apply(lambda r: dict(model_path=r['Abs Weight Path'], **r['kws']), axis=1)
 

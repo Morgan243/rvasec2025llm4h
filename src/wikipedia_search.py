@@ -21,6 +21,7 @@ from tqdm.auto import tqdm
 
 @dataclass
 class WikipediaTwoPhaseSearch(Serializable):
+    """Simple wrapper around Python Wikipedia package"""
     max_results: int = 5
     max_sentences: int = 5
     name: ClassVar[str] = None

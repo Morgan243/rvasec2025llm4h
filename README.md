@@ -1,7 +1,9 @@
 # Quick and Easy - "I just want models running on my machine now!"
 - Setup a service on the machine that will run the LLM: [Ollama is pretty popular, already in many linux repositories](https://ollama.com/)
     - If not in repo, quick install on linux with `curl -fsSL https://ollama.com/install.sh | sh`
-    - They also have containers
+        - They also have containers
+    - Then go browse their library - the gemma3 line is pretty good: https://ollama.com/library/gemma3
+
 - Install/setup an interface
     - aichat - CLI 
     - llm https://llm.datasette.io/en/stable/setup.html

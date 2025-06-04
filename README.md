@@ -4,8 +4,14 @@
         - They also have containers
     - Then go browse their library - the gemma3 line is pretty good: https://ollama.com/library/gemma3
 - Install/setup an interface
-    - aichat - CLI 
-    - llm https://llm.datasette.io/en/stable/setup.html
+    - There are chat UIs floating around if you want - I dont use them
+    - Neovim interfaces I use
+        - Model.nvim
+        - Avante
+        - Minuet
+    - Haven't used these much, but they seem promising
+        - aichat - CLI  to models
+        - llm https://llm.datasette.io/en/stable/setup.html
 - Bigger/deeper guide:
     - mlabonne's llm-course: https://github.com/mlabonne/llm-course
 
@@ -14,7 +20,7 @@ Read on to the sections below if you are interested in specific examples or tool
 
 
 ## Dependencies, Prerequisites, and Setup
-Otherwise, read on for links and notes on setting up an environment to run the examples discussed.
+All code and examples are in Python.
 
 ### Setup Python
 - I'm using `uv`, you _should_ be able to use any environment manager for this (e.g., pixi).
@@ -60,7 +66,7 @@ mkdir $WEIGHT_DIR
 ```bash
 # Fill this in
 export MODEL_NAME="" 
-huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
+huggingface-cli download ${MODEL_NAME} --local-dir=$WEIGHT_DIR/${MODEL_NAME}
 ```
 
 You can also download specific files from an HF repository - helpful for downloading a specific size/quantization.
@@ -70,7 +76,7 @@ You can also download specific files from an HF repository - helpful for downloa
 export MODEL_NAME="" 
 # Include only the 4-bit k-nearest neighbor derived weights 
 export INCLUDE='*q4_k_m*'
-huggingface-cli download ${MODEL_NAME} --local-dir=model_weights/${MODEL_NAME}
+huggingface-cli download ${MODEL_NAME} --local-dir=$WEIGHT_DIR/${MODEL_NAME}
 ```
 
 ## Checking compute capability of Nvidia GPU
@@ -415,7 +421,7 @@ Importantly, **it's constrained generation is very flexible, and even accepts re
 Can also be used with llama.cpp using `-DLLAMA_LLGUIDANCE=ON` option for `cmake`, though I haven't tried this yet.
 
 ### Load a model into guidance
-See their docs (github) - they support various formats - here's how it works for llama GGU weights
+See their docs (github) - they support various formats - here's how it works for llama GGUF weights
 
 ```python
 from guidance import models as gm
@@ -533,7 +539,7 @@ out = g + prompt + get_q_and_a_grammar(name='answer')
 
 I used the `smolagents` library. 
 I recommend cloning their repository, creating a package environment for that repo, then installing additional deps as needed.
-The environment for _this_repo_ has too many deps and has trouble pulling the latest smolagents.
+The environment for _this repo_ has too many deps and has trouble pulling the latest smolagents.
 
 I'm also simply pointing smolagents to an ollama instance, but I believe any OpenAI-compatable interface
 that supports function calling _should_ work.
@@ -552,7 +558,7 @@ smolagent "what is the rvasec conference?"\
 This uses a multi-agent paradigm, where one agent can only search the web
 and the other is the manager. The tool agent gets a search and `visit_webpage`.
 
-### Vuln researdch assistant
+### Vuln research assistant
 See script under `src/smolagents_sploit_assistant.py`
 
 This implements and uses several custom tools

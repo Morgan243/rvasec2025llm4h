@@ -9,6 +9,8 @@ from smolagents import LiteLLMModel
 import exploitdb
 from exploitdb import run_subprocess
 
+from smolagents_shared import SmolAgentConf
+
 
 # TODO: use env var if path not provided
 def make_exploitdb(exploitdb_root: Optional[str] = None):
@@ -19,7 +21,6 @@ def make_exploitdb(exploitdb_root: Optional[str] = None):
                               '--id',
                               '--disable-color'
                                ])
-
 
 
 class SoftwareVulnerabilitySearchTool(Tool):
@@ -80,7 +81,6 @@ class ScanHostTool(Tool):
         return stdout
 
 
-from smolagents_shared import SmolAgentConf
 
 @dataclass
 class ExploitResearchAssistant(SmolAgentConf):
@@ -108,7 +108,6 @@ class ExploitResearchAssistant(SmolAgentConf):
     name: ClassVar[str] = "exploit_research_agent"
     description: ClassVar[str] = "Scans machines on a network for system information and researches potential vulnerabilities"
 
-
     @cached_property
     def model(self) -> LiteLLMModel:
         # using keyword arguments
@@ -132,42 +131,6 @@ class ExploitResearchAssistant(SmolAgentConf):
                          additional_authorized_imports=self.additional_authorized_imports,
                          name=self.name,
                          description=self.description)
-
-
-#model = make_model()
-#model_download_tool = ModelDownloadTool()
-#agent = CodeAgent(tools=[model_download_tool], model=model)
-#agent.run(
-#    "Can you give me the name of the model that has the most downloads in the 'text-to-video' task on the Hugging Face Hub?"
-#)
-
-def testing():
-    vuln_search_tool = SoftwareVulnerabilitySearchTool()
-    vuln_details_tool = RetrieveVulnerabilityDetailsTool()
-    host_scan_tool = ScanHostTool()
-    agent = CodeAgent(tools=[vuln_search_tool,
-                             vuln_details_tool,
-                             host_scan_tool],
-                      model=model,
-                      add_base_tools=False
-                      )
-
-    #ip = "192.168.0.44"
-
-    # Gives some vulns
-    #ip = "192.168.0.1"
-    ip = "192.168.0.181"
-    findings = agent.run(
-        #"Describe a vulnerability on windows 7 due to a pointer exception"
-        #"Describe all vulnerabilities on windows 7 due to a pointer exception"
-        #"What was the vulnerability that caused the heartbleed attack?"
-        #"What operating system is running on 192.168.0.33?"
-        #"Give me some potential vulnerabilities of the host running on 192.168.0.33"
-        f"Discover some potential vulnerabilities of the host running at {ip}"
-        #"What vulnerabilities were discovered in python2.7.x? What are their CVEs?"
-    )
-
-    print(findings)
 
 
 if __name__ == """__main__""":
